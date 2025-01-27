@@ -8,8 +8,6 @@
         body {
             background-color: #FFFAF0;
             font-family: 'Comic Sans MS', cursive, sans-serif;
-            background-image: url('https://example.com/tet-background.jpg'); /* Thay bằng URL hình nền Tết của bạn */
-            background-size: cover;
             margin: 0;
             padding: 0;
             display: flex;
@@ -24,23 +22,26 @@
             -ms-user-select: none;
             user-select: none;
         }
+
         .container {
             background-color: rgba(255, 255, 255, 0.9);
             border-radius: 15px;
             padding: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             max-width: 800px;
-            width: 100%;
+            width: 90%;
             text-align: center;
         }
+
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
             gap: 10px;
             padding: 10px;
         }
+
         .grid-item {
-            padding: 20px;
+            padding: 15px;
             text-align: center;
             background-color: #FFD700;
             border: 2px solid #FF4500;
@@ -48,33 +49,38 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             cursor: pointer;
             transition: background-color 0.2s ease, color 0.2s ease;
-            font-size: 1.2em;
+            font-size: 1em;
             font-weight: bold;
         }
+
         .grid-item.hidden-content {
             color: transparent;
         }
+
         .highlight {
             background-color: #FF4500;
             color: white;
         }
+
         .btn-choose {
             margin-top: 20px;
-            padding: 15px 30px;
+            padding: 10px 20px;
             background-color: #FF4500;
             color: white;
             border: none;
             border-radius: 10px;
             cursor: pointer;
-            font-size: 1.5em;
+            font-size: 1.2em;
             font-weight: bold;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             transition: background-color 0.2s ease, box-shadow 0.2s ease;
         }
+
         .btn-choose:hover {
             background-color: #E33E00;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
         }
+
         .modal {
             display: none;
             position: fixed;
@@ -87,57 +93,74 @@
             background-color: rgba(0,0,0,0.7);
             padding-top: 60px;
         }
+
         .modal-content {
             background-color: #C21807;
-            background-image: url('https://example.com/lucky-money.jpg'); /* Thay bằng URL hình ảnh bao lì xì của bạn */
-            background-size: cover;
-            background-position: center;
             margin: 5% auto;
             padding: 30px;
             border: 2px solid #FFD700;
             width: 80%;
             text-align: center;
-            font-size: 2em;
+            font-size: 1.5em;
             color: #FFD700;
             border-radius: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            position: relative; /* Để thêm các yếu tố trang trí */
+            position: relative;
         }
-        .modal-content::before {
-            content: url('https://example.com/lantern.png'); /* Thay bằng URL hình ảnh đèn lồng của bạn */
-            position: absolute;
-            top: -40px; /* Điều chỉnh dựa trên kích thước hình ảnh */
-            left: 50%;
-            transform: translateX(-50%);
-        }
-        .modal-content::after {
-            content: url('https://example.com/fireworks.png'); /* Thay bằng URL hình ảnh pháo hoa của bạn */
-            position: absolute;
-            bottom: -40px; /* Điều chỉnh dựa trên kích thước hình ảnh */
-            right: 20px; /* Điều chỉnh vị trí */
-        }
+
         .close {
             color: #FFD700;
             float: right;
             font-size: 28px;
             font-weight: bold;
         }
+
         .close:hover,
         .close:focus {
             color: #FF4500;
             text-decoration: none;
             cursor: pointer;
         }
+
         .selected {
             pointer-events: none;
             opacity: 0.6;
         }
+
         .info {
-            margin-top: 20px;
-            font-size: 1.2em;
+            margin-top: 10px;
+            font-size: 0.9em;
+            padding: 5px 10px;
         }
+
         html {
             touch-action: manipulation;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                width: 95%;
+                padding: 15px;
+            }
+
+            .grid-container {
+                grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            }
+
+            .grid-item {
+                padding: 10px;
+                font-size: 0.8em;
+            }
+
+            .btn-choose {
+                padding: 10px 20px;
+                font-size: 1em;
+            }
+
+            .modal-content {
+                font-size: 1.2em;
+                padding: 20px;
+            }
         }
     </style>
 </head>
@@ -156,9 +179,13 @@
     </div>
 </div>
 
+<canvas id="fireworksCanvas" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none;"></canvas>
+
 <script>
     let loopInterval;
     let currentIndex = 0;
+    let fireworksRunning = false;
+    let fireworksInterval;
 
     function formatCurrency(amount) {
         return amount.toLocaleString('vi-VN', { minimumFractionDigits: 0 });
@@ -217,16 +244,14 @@
     function startLoop() {
         const gridItems = document.querySelectorAll('.grid-item:not(.selected)');
         if (gridItems.length === 0) return;
-        if (currentIndex >= gridItems.length) {
-            currentIndex = 0;
-        }
+        currentIndex = 0;
         loopInterval = setInterval(() => {
             gridItems.forEach((item) => {
                 item.classList.remove('highlight');
             });
             gridItems[currentIndex].classList.add('highlight');
             currentIndex = (currentIndex + 1) % gridItems.length;
-        }, 100);
+        }, 200);
     }
 
     function stopLoopAndShowPopup() {
@@ -234,36 +259,161 @@
         const gridItems = document.querySelectorAll('.grid-item:not(.selected)');
         if (gridItems.length === 0) return;
 
-        const selectedGridItem = gridItems[(currentIndex - 1 + gridItems.length) % gridItems.length];
+        const selectedIndex = (currentIndex - 1 + gridItems.length) % gridItems.length;
+        const selectedGridItem = gridItems[selectedIndex];
         selectedGridItem.classList.remove('hidden-content');
         selectedGridItem.classList.add('selected');
 
         document.getElementById('popup-content').textContent = selectedGridItem.textContent;
-document.getElementById('myModal').style.display = "block";
-    }
+        document.getElementById('myModal').style.display = "block";
 
-    function closePopup() {
-        document.getElementById('myModal').style.display = "none";
-        startLoop();
-    }
-
-    function handleClickOutside(event) {
-        if (event.target === event.currentTarget) {
-            closePopup();
+        // Trigger fireworks when the popup opens
+                launchFireworks();
         }
-    }
 
-    distributeMoney(1200, 11);
+        function closePopup() {
+            document.getElementById('myModal').style.display = "none";
+            stopFireworks(); // Stop fireworks when the popup closes
+            startLoop();
+        }
 
-    // Ngăn chặn zoom khi double-click
-    document.addEventListener('dblclick', function(event) {
-        event.preventDefault();
-    });
+        function handleClickOutside(event) {
+            if (event.target === event.currentTarget) {
+                closePopup();
+            }
+        }
 
-    // Ngăn chặn pinch zoom trên mobile
-    document.addEventListener('gesturestart', function(event) {
-        event.preventDefault();
-    });
+        const canvas = document.getElementById('fireworksCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        let fireworks = [];
+        let particles = [];
+
+        class Firework {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height;
+                this.targetX = Math.random() * canvas.width;
+                this.targetY = Math.random() * canvas.height / 2;
+                this.speed = 2;
+                this.angle = Math.atan2(this.targetY - this.y, this.targetX - this.x);
+                this.brightness = Math.random() * 50 + 50;
+                this.trail = [];
+            }
+
+            update() {
+                this.trail.push({ x: this.x, y: this.y });
+                if (this.trail.length > 5) this.trail.shift();
+                this.x += Math.cos(this.angle) * this.speed;
+                this.y += Math.sin(this.angle) * this.speed;
+
+                if (Math.hypot(this.targetX - this.x, this.targetY - this.y) < 5) {
+                    this.explode();
+                    fireworks = fireworks.filter(fw => fw !== this);
+                }
+            }
+
+            explode() {
+                for (let i = 0; i < 100; i++) { // Increase the number of particles
+                    const particle = new Particle(this.x, this.y, this.brightness);
+                    particles.push(particle);
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.moveTo(this.trail[0].x, this.trail[0].y);
+                for (let i = 1; i < this.trail.length; i++) {
+                    ctx.lineTo(this.trail[i].x, this.trail[i].y);
+                }
+                ctx.strokeStyle = `hsl(${this.brightness}, 100%, 50%)`;
+                ctx.stroke();
+            }
+        }
+
+        class Particle {
+            constructor(x, y, brightness) {
+                this.x = x;
+                this.y = y;
+                this.brightness = brightness;
+                this.angle = Math.random() * 2 * Math.PI;
+                this.speed = Math.random() * 5 + 1;
+                this.friction = 0.98;
+                this.gravity = 0.5;
+                this.hue = Math.random() * 360;
+            }
+
+            update() {
+                this.speed *= this.friction;
+                this.x += Math.cos(this.angle) * this.speed;
+                this.y += Math.sin(this.angle) * this.speed + this.gravity;
+                this.brightness -= 2;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 2, 0, Math.PI * 2, false);
+                ctx.fillStyle = `hsl(${this.hue}, 100%, 50%)`;
+                ctx.fill();
+            }
+        }
+
+        function animate() {
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.fillStyle = `rgba(0, 0, 0, 0.2)`;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.globalCompositeOperation = 'lighter';
+
+            fireworks.forEach(firework => {
+                firework.update();
+                firework.draw();
+            });
+
+            particles.forEach((particle, index) => {
+                particle.update();
+                particle.draw();
+                if (particle.brightness <= 0) particles.splice(index, 1);
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        function createFireworks() {
+            const firework = new Firework();
+            fireworks.push(firework);
+        }
+
+        function launchFireworks() {
+            if (!fireworksRunning) {
+                fireworksRunning = true;
+                fireworksInterval = setInterval(createFireworks, 300); // Adjust the interval for more density
+            }
+        }
+
+        function stopFireworks() {
+            fireworksRunning = false;
+            clearInterval(fireworksInterval);
+        }
+
+        animate();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        distributeMoney(1200, 11);
+
+        // Ngăn chặn zoom khi double-click
+        document.addEventListener('dblclick', function(event) {
+            event.preventDefault();
+        });
+
+        // Ngăn chặn pinch zoom trên mobile
+        document.addEventListener('gesturestart', function(event) {
+            event.preventDefault();
+        });
 </script>
 </body>
 </html>
