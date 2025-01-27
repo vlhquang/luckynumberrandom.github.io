@@ -3,165 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
     <title>Money Distribution for Tet</title>
     <style>
         body {
-            background-color: #FFFAF0;
-            font-family: 'Comic Sans MS', cursive, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            -khtml-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
+    background-color: #FFFAF0;
+    font-family: 'Roboto', sans-serif; /* Update to a professional font */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
 
-        .container {
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            max-width: 800px;
-            width: 90%;
-            text-align: center;
-        }
+.container {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    width: 90%;
+    text-align: center;
+}
 
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-            gap: 10px;
-            padding: 10px;
-        }
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 10px;
+    padding: 10px;
+}
 
-        .grid-item {
-            padding: 15px;
-            text-align: center;
-            background-color: #FFD700;
-            border: 2px solid #FF4500;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            cursor: pointer;
-            transition: background-color 0.2s ease, color 0.2s ease;
-            font-size: 1em;
-            font-weight: bold;
-        }
+.grid-item {
+    padding: 15px;
+    text-align: center;
+    background-color: #FFD700;
+    border: 2px solid #FF4500;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    font-size: 1.2em; /* Increase font size */
+    font-weight: bold;
+}
 
-        .grid-item.hidden-content {
-            color: transparent;
-        }
+.grid-item.hidden-content {
+    color: transparent;
+}
 
-        .highlight {
-            background-color: #FF4500;
-            color: white;
-        }
+.highlight {
+    background-color: #FF4500;
+    color: white;
+}
 
-        .btn-choose {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #FF4500;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 1.2em;
-            font-weight: bold;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            transition: background-color 0.2s ease, box-shadow 0.2s ease;
-        }
+.btn-choose {
+    margin-top: 20px;
+    padding: 15px 30px;
+    background-color: #FF4500;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.5em; /* Increase font size */
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
 
-        .btn-choose:hover {
-            background-color: #E33E00;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        }
+.btn-choose:hover {
+    background-color: #E33E00;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
 
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.7);
-            padding-top: 60px;
-        }
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.7);
+    padding-top: 60px;
+}
 
-        .modal-content {
-            background-color: #C21807;
-            margin: 5% auto;
-            padding: 30px;
-            border: 2px solid #FFD700;
-            width: 80%;
-            text-align: center;
-            font-size: 1.5em;
-            color: #FFD700;
-            border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            position: relative;
-        }
+.modal-content {
+    background-color: #C21807;
+    margin: 5% auto;
+    padding: 30px;
+    border: 2px solid #FFD700;
+    width: 80%;
+    text-align: center;
+    font-size: 2em; /* Increase font size */
+    color: #FFD700;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
 
-        .close {
-            color: #FFD700;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
+.close {
+    color: #FFD700;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
 
-        .close:hover,
-        .close:focus {
-            color: #FF4500;
-            text-decoration: none;
-            cursor: pointer;
-        }
+.close:hover,
+.close:focus {
+    color: #FF4500;
+    text-decoration: none;
+    cursor: pointer;
+}
 
-        .selected {
-            pointer-events: none;
-            opacity: 0.6;
-        }
+.selected {
+    pointer-events: none;
+    opacity: 0.6;
+}
 
-        .info {
-            margin-top: 10px;
-            font-size: 0.9em;
-            padding: 5px 10px;
-        }
+.info {
+    margin-top: 10px;
+    font-size: 1em; /* Increase font size */
+    padding: 5px 10px;
+}
 
-        html {
-            touch-action: manipulation;
-        }
+html {
+    touch-action: manipulation;
+}
 
-        @media (max-width: 600px) {
-            .container {
-                width: 95%;
-                padding: 15px;
-            }
+@media (max-width: 600px) {
+    .container {
+        width: 95%;
+        padding: 15px;
+    }
 
-            .grid-container {
-                grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-            }
+    .grid-container {
+        grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    }
 
-            .grid-item {
-                padding: 10px;
-                font-size: 0.8em;
-            }
+    .grid-item {
+        padding: 15px;
+        font-size: 1em; /* Increase font size */
+    }
 
-            .btn-choose {
-                padding: 10px 20px;
-                font-size: 1em;
-            }
+    .btn-choose {
+        padding: 10px 20px;
+        font-size: 1.2em; /* Increase font size */
+    }
 
-            .modal-content {
-                font-size: 1.2em;
-                padding: 20px;
-            }
-        }
+    .modal-content {
+        font-size: 1.5em; /* Adjust font size */
+        padding: 20px;
+    }
+}
+
     </style>
 </head>
 <body>
