@@ -14,8 +14,7 @@
     padding: 0;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    justify-content: space-between; /* Distribute space between items */
     min-height: 100vh;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -33,6 +32,14 @@
     max-width: 800px;
     width: 90%;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Ensure #results is at the top and #info, button are at the bottom */
+    height: 100%;
+}
+
+#results {
+    margin-bottom: auto; /* Push #results to the top */
 }
 
 .grid-container {
@@ -64,15 +71,21 @@
     color: white;
 }
 
+#info {
+    margin-top: 20px; /* Add some margin to separate from the button */
+    font-size: 1em; /* Increase font size */
+    padding: 5px 10px;
+}
+
 .btn-choose {
     margin-top: 20px;
-    padding: 15px 30px;
+    padding: 20px 40px; /* Increased padding for a larger button */
     background-color: #FF4500;
     color: white;
     border: none;
     border-radius: 10px;
     cursor: pointer;
-    font-size: 1.5em; /* Increase font size */
+    font-size: 2em; /* Increased font size */
     font-weight: bold;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transition: background-color 0.2s ease, box-shadow 0.2s ease;
@@ -98,12 +111,12 @@
 
 .modal-content {
     background-color: #C21807;
-    margin: 5% auto;
-    padding: 30px;
+    margin: 10% auto; /* Adjust margins to center vertically */
+    padding: 50px; /* Increase padding for a larger popup */
     border: 2px solid #FFD700;
-    width: 80%;
+    width: 90%; /* Increase width */
     text-align: center;
-    font-size: 2em; /* Increase font size */
+    font-size: 2.5em; /* Increase font size */
     color: #FFD700;
     border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -129,12 +142,6 @@
     opacity: 0.6;
 }
 
-.info {
-    margin-top: 10px;
-    font-size: 1em; /* Increase font size */
-    padding: 5px 10px;
-}
-
 html {
     touch-action: manipulation;
 }
@@ -151,19 +158,34 @@ html {
 
     .grid-item {
         padding: 15px;
-        font-size: 1em; /* Increase font size */
+        font-size: 1em;
     }
 
     .btn-choose {
-        padding: 10px 20px;
-        font-size: 1.2em; /* Increase font size */
+        padding: 15px 30px; /* Adjust padding for mobile */
+        font-size: 1.5em; /* Adjust font size for mobile */
     }
 
     .modal-content {
-        font-size: 1.5em; /* Adjust font size */
-        padding: 20px;
+        font-size: 2em; /* Adjust font size for mobile */
+        padding: 40px; /* Adjust padding for mobile */
     }
 }
+
+        .modal-content {
+    background-color: #C21807;
+    margin: 10% auto; /* Adjust margins to center vertically */
+    padding: 50px; /* Increase padding for a larger popup */
+    border: 2px solid #FFD700;
+    width: 90%; /* Increase width */
+    text-align: center;
+    font-size: 2.5em; /* Increase font size */
+    color: #FFD700;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
 
     </style>
 </head>
