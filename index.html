@@ -67,7 +67,7 @@
             transition: all 0.3s ease;
             text-align: center;
             position: relative;
-            width: 90%;
+            width: 85%;
         }
 
         /* Ẩn nội dung trong ô */
@@ -196,20 +196,33 @@
     }
 
     function distributeMoney(totalAmount, peopleCount) {
-        let minAmount = Math.floor((totalAmount / peopleCount) * 0.7);
-        let maxAmount = Math.floor((totalAmount / peopleCount) * 1.3);
+        let minAmount = Math.floor((totalAmount / peopleCount) * 0.6);
+        let maxAmount = (Math.floor(totalAmount / peopleCount) + Math.floor(Math.random() * (totalAmount / peopleCount)));
+        maxAmount = maxAmount < 160 ? 160 : maxAmount;
 
         let amounts = [];
         let remainingAmount = totalAmount;
 
-        for (let i = 0; i < peopleCount - 1; i++) {
+        for (let i = 0; i < peopleCount; i++) {
             let amount = Math.floor(Math.random() * (maxAmount - minAmount + 1)) + minAmount;
+            while (amounts.includes(amount)) {
+                amount = Math.floor(Math.random() * (maxAmount - minAmount + 1)) + minAmount;
+            }
             amounts.push(amount);
             remainingAmount -= amount;
         }
 
-        amounts.push(remainingAmount);
-
+        while (remainingAmount !== 0) {
+            for (let i = 0; i < peopleCount; i++) {
+                if (remainingAmount === 0) break;
+                let adjustment = (remainingAmount > 0) ? 1 : -1;
+                let newAmount = amounts[i] + adjustment;
+                if (newAmount >= minAmount && newAmount <= maxAmount && !amounts.includes(newAmount)) {
+                    amounts[i] = newAmount;
+                    remainingAmount -= adjustment;
+                }
+            }
+        }
         return amounts;
     }
 
