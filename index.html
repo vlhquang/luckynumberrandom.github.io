@@ -1,339 +1,603 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lì Xì Tết - Money Distribution</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Rút Bao Lì Xì May Mắn</title>
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <style>
         :root {
-            --primary-red: #C21807;
-            --primary-gold: #FFD700;
-            --hover-gold: #FFE55C;
-            --bg-cream: #FFFAF0;
-            --shadow-color: rgba(0, 0, 0, 0.2);
+            --red-primary: #d32f2f;
+            --red-dark: #b71c1c;
+            --gold: #ffcf33;
+            --gold-dark: #ffa000;
+            --white: #ffffff;
+            --bg-color: #fff8f8;
+            --shadow: 0 4px 20px rgba(0,0,0,0.15);
+            --text-dark: #2c3e50;
         }
 
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
+
         body {
-            background-color: var(--bg-cream);
-            font-family: system-ui, -apple-system, sans-serif;
-            margin: 0;
-            padding: 0;
-            height: 100vh;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#ffcdd2 0.8px, transparent 0.8px);
+            background-size: 20px 20px;
+            color: var(--text-dark);
+            min-height: 100vh;
+            padding: 10px;
+            overflow-x: hidden;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            user-select: none;
-            overflow: hidden;
         }
 
         .container {
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            padding: 15px;
-            box-shadow: 0 4px 12px var(--shadow-color);
             width: 100%;
-            max-width: 500px;
-            height: 85%;
+            max-width: 1200px;
+            margin: 0 auto;
+            flex: 1;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
         }
 
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: 10px;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            justify-items: center;
-            align-content: start;
-        }
-
-        .grid-item {
-            aspect-ratio: 1;
-            background-color: var(--primary-gold);
-            border: 2px solid var(--primary-red);
-            border-radius: 10px;
-            box-shadow: 0 4px 8px var(--shadow-color);
-            cursor: pointer;
-            font-size: calc(14px + 1vw);
-            font-weight: bold;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: all 0.3s ease;
+        header {
             text-align: center;
-            position: relative;
-            width: 85%;
+            margin-bottom: 10px;
+            animation: fadeIn 1s ease-in;
         }
 
-        /* Ẩn nội dung trong ô */
-        .grid-item .content-hidden {
-            visibility: hidden; /* Chỉ ẩn nội dung, không ảnh hưởng đến khung */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
-        .grid-item.revealed {
-            background-color: #E6C200;
-            pointer-events: none;
+        h1 {
+            color: var(--red-primary);
+            text-shadow: 1px 1px 0px var(--gold);
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            margin-bottom: 5px;
+            font-weight: 800;
         }
 
-        .action-buttons {
-            display: flex;
+        .card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: clamp(10px, 3vw, 25px);
+            box-shadow: var(--shadow);
+            margin-bottom: 10px;
+            border: 2px solid #ffcdd2;
+        }
+
+        /* Form Styling */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 10px;
-            flex-direction: row;
-            justify-content: center;
-            position: absolute;
-            bottom: 20px;
-            width: 100%;
         }
 
-        .icon-button {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: var(--primary-red);
-            color: var(--primary-gold);
+        .form-group { margin-bottom: 8px; }
+        label { display: block; margin-bottom: 4px; font-weight: bold; color: var(--red-dark); font-size: 0.75rem; }
+        
+        input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #fce4ec;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            background: #ffffff;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+        input:focus { 
+            border-color: var(--red-primary); 
+            outline: none; 
+            box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.1);
+        }
+
+        .money-input {
+            color: var(--red-primary);
+        }
+
+        .btn-group { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 15px; }
+        button {
+            flex: 1;
+            padding: 12px;
             border: none;
+            border-radius: 10px;
+            font-weight: bold;
             cursor: pointer;
-            font-size: 24px;
-            box-shadow: 0 4px 8px var(--shadow-color);
-            transition: transform 0.2s, background-color 0.2s;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            min-width: 100px;
+            font-size: 0.75rem;
             display: flex;
             align-items: center;
             justify-content: center;
+            gap: 5px;
         }
+        .btn-suggest { background: #607d8b; color: white; }
+        .btn-save { background: var(--gold); color: #5d4037; }
+        .btn-start { background: var(--red-primary); color: white; }
+        button:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
 
-        .icon-button:hover {
-            transform: translateY(-2px);
-            background-color: #A61505;
-        }
-
-        .modal {
+        /* Preview Area */
+        .preview-container {
+            margin-top: 10px;
+            padding: 10px;
+            background: #fff9c4;
+            border-radius: 12px;
             display: none;
+            border: 1px solid var(--gold-dark);
+        }
+        .preview-header {
+            margin-bottom: 3px;
+            font-weight: 800;
+            color: var(--red-dark);
+            font-size: 0.75rem;
+            text-align: center;
+        }
+        .preview-total {
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 900;
+            color: var(--red-primary);
+            margin-bottom: 8px;
+            padding-bottom: 5px;
+            border-bottom: 1px dashed rgba(211, 47, 47, 0.2);
+        }
+        .preview-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 5px;
+        }
+        .preview-item {
+            background: white;
+            padding: 5px;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: var(--red-primary);
+            border: 1px solid #ffe082;
+        }
+
+        /* Game UI */
+        #game-screen { 
+            display: none; 
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 80px; 
+        }
+        
+        .bubble-controls {
             position: fixed;
-            inset: 0;
-            background-color: rgba(0, 0, 0, 0.7);
-            justify-content: center;
-            align-items: center;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
             z-index: 1000;
         }
 
-        .modal-content {
-            background-color: var(--primary-red);
-            color: var(--primary-gold);
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            max-width: 90%;
-            position: relative;
-            min-width: 250px;
+        .bubble-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+            border: 2px solid var(--gold);
+            padding: 0;
+            min-width: unset;
+            flex: none;
         }
 
-        #myModal .modal-content p {
-            font-size: 2rem; /* Làm cho nội dung popup lớn hơn */
-            font-weight: bold;
-            color: var(--primary-gold);
+        .btn-settings { background: #607d8b; color: white; }
+        .btn-refresh { background: var(--red-primary); color: white; }
+
+        .lixi-grid {
+            display: grid;
+            gap: 8px;
+            justify-items: center;
+            width: 100%;
+            margin: auto 0;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
         }
+
+        .grid-small .lixi-wrapper { max-width: 120px; }
+        .grid-medium .lixi-wrapper { max-width: 80px; }
+        .grid-large .lixi-wrapper { max-width: 60px; }
+
+        @media (min-width: 768px) {
+            .lixi-grid { gap: 15px; }
+            .grid-small .lixi-wrapper { max-width: 160px; }
+            .grid-medium .lixi-wrapper { max-width: 110px; }
+            .grid-large .lixi-wrapper { max-width: 85px; }
+            .bubble-btn { width: 60px; height: 60px; font-size: 1.5rem; }
+        }
+
+        .lixi-wrapper {
+            width: 100%;
+            aspect-ratio: 3 / 4.5;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .lixi-card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .lixi-wrapper.open .lixi-card {
+            transform: rotateY(180deg);
+        }
+
+        .lixi-front, .lixi-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            border: 2px solid var(--gold);
+        }
+
+        .lixi-front {
+            background: linear-gradient(135deg, var(--red-primary), var(--red-dark));
+            color: var(--gold);
+        }
+
+        .lixi-front::before {
+            content: '🧧';
+            font-size: clamp(1.2rem, 4vw, 2.5rem);
+        }
+        .lixi-front::after {
+            content: 'Lì xì';
+            font-weight: 600;
+            font-size: clamp(0.5rem, 2vw, 0.9rem);
+            text-align: center;
+        }
+
+        .grid-large .lixi-front::after { display: none; }
+
+        .lixi-back {
+            background: #fff;
+            color: var(--red-dark);
+            transform: rotateY(180deg);
+            padding: 5px;
+            text-align: center;
+        }
+
+        .amount-text {
+            font-size: clamp(0.6rem, 2.5vw, 1.1rem);
+            font-weight: 800;
+            color: var(--red-primary);
+            line-height: 1.1;
+        }
+
+        .congrats-text {
+            font-size: clamp(0.4rem, 1.5vw, 0.7rem);
+            color: var(--gold-dark);
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .confetti {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        @keyframes popOut {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .animate-pop { animation: popOut 0.4s ease; }
+
+        .hidden { display: none !important; }
     </style>
+<script type="importmap">
+{
+  "imports": {
+    "jquery": "https://esm.sh/jquery@^4.0.0"
+  }
+}
+</script>
 </head>
 <body>
 
-<div class="container">
-    <div id="results" class="grid-container"></div>
-</div>
+    <div class="container">
+        <header id="main-header">
+            <h1>LÌ XÌ TẾT</h1>
+        </header>
 
-<div class="action-buttons">
-    <button class="icon-button" onclick="showConfigModal()" title="Cấu hình">⚙️</button>
-    <button class="icon-button" onclick="regenerateGrid()" title="Tạo mới">🔄</button>
-    <button class="icon-button" onclick="confirmRandom()" title="Trộn lì xì">🔀</button>
-</div>
+        <!-- Configuration Screen -->
+        <div id="setup-screen" class="card">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Tổng ngân sách (VND)</label>
+                    <input type="text" id="total-amount" value="1.000.000" class="money-input">
+                </div>
+                <div class="form-group">
+                    <label>Số bao lì xì</label>
+                    <input type="number" id="envelope-count" value="10" min="1" max="50">
+                </div>
+                <div class="form-group">
+                    <label>Lộc tối thiểu (VND)</label>
+                    <input type="text" id="min-val" value="20.000" class="money-input">
+                </div>
+                <div class="form-group">
+                    <label>Lộc tối đa (VND)</label>
+                    <input type="text" id="max-val" value="200.000" class="money-input">
+                </div>
+            </div>
 
-<div id="configModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal('configModal')">&times;</span>
-        <h2>Cấu hình Lì Xì</h2>
-        <div class="config-form">
-            <div class="input-group">
-                <label for="totalAmount">Tổng tiền (nghìn đồng):</label>
-                <input type="number" id="totalAmount" value="1200" min="100" step="100">
+            <div class="btn-group">
+                <button type="button" class="btn-suggest" id="btn-suggest">✨ Gợi ý</button>
+                <button type="button" class="btn-save" id="btn-save">💾 Lưu</button>
+                <button type="button" class="btn-start" id="btn-start-game">🚀 Bắt đầu</button>
             </div>
-            <div class="input-group">
-                <label for="peopleCount">Số người:</label>
-                <input type="number" id="peopleCount" value="11" min="2" max="20">
-            </div>
-            <div class="modal-buttons">
-                <button class="btn" onclick="saveConfig()">Lưu</button>
-                <button class="btn" onclick="closeModal('configModal')">Hủy</button>
+
+            <div id="preview-container" class="preview-container">
+                <div class="preview-header">Danh sách lộc dự kiến:</div>
+                <div id="preview-total" class="preview-total">Tổng cộng: 0đ</div>
+                <div id="preview-list" class="preview-list"></div>
             </div>
         </div>
-    </div>
-</div>
 
-<div id="myModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal('myModal')">&times;</span>
-        <p id="popup-content"></p>
-    </div>
-</div>
-
-<div id="confirmModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal('confirmModal')">&times;</span>
-        <p>Bạn có chắc muốn trộn các lì xì?</p>
-        <div class="modal-buttons">
-            <button class="btn" onclick="shuffleGrid()">Có</button>
-            <button class="btn" onclick="closeModal('confirmModal')">Không</button>
+        <!-- Game Screen -->
+        <div id="game-screen" style="display: none;">
+            <div class="bubble-controls">
+                <button class="bubble-btn btn-settings" id="btn-back" title="Cấu hình">⚙️</button>
+                <button class="bubble-btn btn-refresh" id="btn-shuffle" title="Làm mới">🔄</button>
+            </div>
+            <div class="lixi-grid" id="lixi-grid"></div>
         </div>
     </div>
-</div>
 
-<script>
-    function formatCurrency(amount) {
-        return new Intl.NumberFormat('vi-VN').format(amount * 1000);
-    }
-
-    function distributeMoney(totalAmount, peopleCount) {
-        let minAmount = Math.floor((totalAmount / peopleCount) * 0.6);
-        let maxAmount = (Math.floor(totalAmount / peopleCount) + Math.floor(Math.random() * (totalAmount / peopleCount)));
-        maxAmount = maxAmount < 160 ? 160 : maxAmount;
-
-        let amounts = [];
-        let remainingAmount = totalAmount;
-
-        for (let i = 0; i < peopleCount; i++) {
-            let amount = Math.floor(Math.random() * (maxAmount - minAmount + 1)) + minAmount;
-            while (amounts.includes(amount)) {
-                amount = Math.floor(Math.random() * (maxAmount - minAmount + 1)) + minAmount;
-            }
-            amounts.push(amount);
-            remainingAmount -= amount;
-        }
-
-        while (remainingAmount !== 0) {
-            for (let i = 0; i < peopleCount; i++) {
-                if (remainingAmount === 0) break;
-                let adjustment = (remainingAmount > 0) ? 1 : -1;
-                let newAmount = amounts[i] + adjustment;
-                if (newAmount >= minAmount && newAmount <= maxAmount && !amounts.includes(newAmount)) {
-                    amounts[i] = newAmount;
-                    remainingAmount -= adjustment;
-                }
-            }
-        }
-        return amounts;
-    }
-
-    function createGrid(amounts) {
-        const resultsDiv = document.getElementById('results');
-        resultsDiv.innerHTML = '';
-
-        amounts.forEach((amount) => {
-            const gridItem = document.createElement('div');
-            gridItem.className = 'grid-item';
-
-            // Nội dung của ô được chứa trong một div con
-            const content = document.createElement('div');
-            content.className = 'grid-item-content';
-            content.textContent = formatCurrency(amount);
-            content.dataset.amount = amount;
-
-            // Đặt vào trong ô
-            gridItem.appendChild(content);
-            gridItem.onclick = () => {
-                if (!gridItem.classList.contains('revealed')) {
-                    showPopup(content.textContent); // Hiển thị nội dung của ô
-                    gridItem.classList.add('revealed');
-                    gridItem.querySelector('.grid-item-content');
-            if (content) {
-                content.classList.remove('content-hidden'); // Ẩn nội dung
-            }
-                }
+    <script>
+        $(function() {
+            let currentConfig = {
+                total: 1000000,
+                count: 10,
+                min: 20000,
+                max: 200000,
+                amounts: []
             };
 
-            resultsDiv.appendChild(gridItem);
-        });
-    }
-
-    function showConfigModal() {
-        document.getElementById('configModal').style.display = 'flex';
-    }
-
-    function saveConfig() {
-        const totalAmount = parseInt(document.getElementById('totalAmount').value);
-        const peopleCount = parseInt(document.getElementById('peopleCount').value);
-
-        if (isNaN(totalAmount) || isNaN(peopleCount) || totalAmount < 100 || peopleCount < 2) {
-            alert('Vui lòng nhập số hợp lệ!');
-            return;
-        }
-
-        closeModal('configModal');
-        regenerateGrid();
-    }
-
-    function regenerateGrid() {
-        const totalAmount = parseInt(document.getElementById('totalAmount').value);
-        const peopleCount = parseInt(document.getElementById('peopleCount').value);
-
-        if (isNaN(totalAmount) || isNaN(peopleCount) || totalAmount < 100 || peopleCount < 2) {
-            alert('Vui lòng nhập số hợp lệ!');
-            return;
-        }
-
-        const amounts = distributeMoney(totalAmount, peopleCount);
-        createGrid(amounts);
-    }
-
-    function shuffleGrid() {
-        const gridItems = document.querySelectorAll('.grid-item');
-
-        // Ẩn nội dung trong các ô
-        gridItems.forEach(item => {
-            const content = item.querySelector('.grid-item-content');
-            if (content) {
-                content.classList.add('content-hidden'); // Ẩn nội dung
+            // Format Helpers
+            function formatNumber(n) {
+                return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             }
-        });
 
-        // Trộn lại các ô trong grid
-        setTimeout(() => {
-            const shuffledItems = Array.from(gridItems);
-            shuffledItems.sort(() => Math.random() - 0.5); // Shuffle order
+            function parseFormattedNumber(s) {
+                return parseInt(s.replace(/\./g, '')) || 0;
+            }
 
-            const resultsDiv = document.getElementById('results');
-            shuffledItems.forEach(item => {
-                resultsDiv.appendChild(item); // Re-attach shuffled items to the grid
+            $(document).on('input', '.money-input', function() {
+                let val = $(this).val();
+                let numeric = val.replace(/\D/g, '');
+                if (numeric) {
+                    $(this).val(formatNumber(parseInt(numeric)));
+                } else {
+                    $(this).val('');
+                }
             });
-        }, 500);  // Chờ một khoảng thời gian để hiệu ứng ẩn hoàn tất
 
-        closeModal('confirmModal');
-    }
+            // Core Logic
+            function calculateAmounts(total, count, min, max) {
+                if (total % 10000 !== 0 || min % 10000 !== 0 || max % 10000 !== 0) {
+                    alert("Các giá trị tiền phải chia hết cho 10.000đ để đúng phong tục!");
+                    return null;
+                }
+                
+                const U_TOTAL = total / 10000;
+                const U_MIN = min / 10000;
+                const U_MAX = max / 10000;
 
-    function showPopup(content) {
-        document.getElementById('popup-content').textContent = content;
-        document.getElementById('myModal').style.display = 'flex';
-    }
+                const minSum = (count * U_MIN) + (count * (count - 1) / 2);
+                const maxSum = (count * U_MAX) - (count * (count - 1) / 2);
 
-    function confirmRandom() {
-        document.getElementById('confirmModal').style.display = 'flex';
-    }
+                if (U_TOTAL < minSum || U_TOTAL > maxSum) {
+                    alert(`Lỗi: Không thể chia tiền với cấu hình này.\nVới ${count} người, tổng tiền phải từ ${formatNumber(minSum * 10000)}đ đến ${formatNumber(maxSum * 10000)}đ`);
+                    return null;
+                }
 
-    function closeModal(modalId) {
-        document.getElementById(modalId).style.display = 'none';
-    }
+                let units = [];
+                for (let i = 0; i < count; i++) {
+                    units.push(U_MIN + i);
+                }
 
-    window.onclick = function(event) {
-        if (event.target.classList.contains('modal')) {
-            event.target.style.display = 'none';
-        }
-    };
+                let currentSum = units.reduce((a, b) => a + b, 0);
+                let deficit = U_TOTAL - currentSum;
 
-    // Initialize
-    regenerateGrid();
-</script>
+                while (deficit > 0) {
+                    let changed = false;
+                    for (let i = count - 1; i >= 0; i--) {
+                        if (deficit <= 0) break;
+                        const upperLimit = (i === count - 1) ? U_MAX : units[i + 1] - 1;
+                        const canAdd = upperLimit - units[i];
+                        if (canAdd > 0) {
+                            const add = Math.min(canAdd, deficit);
+                            units[i] += add;
+                            deficit -= add;
+                            changed = true;
+                        }
+                    }
+                    if (!changed) break;
+                }
 
+                return units.map(u => u * 10000);
+            }
+
+            function updatePreview() {
+                const totalInput = parseFormattedNumber($('#total-amount').val());
+                const count = parseInt($('#envelope-count').val());
+                const min = parseFormattedNumber($('#min-val').val());
+                const max = parseFormattedNumber($('#max-val').val());
+
+                const result = calculateAmounts(totalInput, count, min, max);
+                if (result) {
+                    currentConfig = { total: totalInput, count, min, max, amounts: result };
+                    const actualTotal = result.reduce((a, b) => a + b, 0);
+                    $('#preview-total').text(`Tổng cộng: ${formatNumber(actualTotal)}đ`);
+
+                    const $list = $('#preview-list');
+                    $list.empty();
+                    [...result].sort(() => Math.random() - 0.5).forEach(amt => {
+                        $list.append(`<div class="preview-item">${formatNumber(amt)}đ</div>`);
+                    });
+                    $('#preview-container').fadeIn();
+                    return true;
+                }
+                return false;
+            }
+
+            function createConfetti() {
+                const colors = ['#f44336', '#ffcf33', '#ffa000', '#ffffff', '#ff1744'];
+                for (let i = 0; i < 25; i++) {
+                    const $c = $('<div class="confetti"></div>');
+                    const startX = Math.random() * window.innerWidth;
+                    const startY = -20;
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    
+                    $c.css({
+                        left: startX,
+                        top: startY,
+                        backgroundColor: color,
+                        transform: `rotate(${Math.random() * 360}deg)`
+                    });
+                    
+                    $('body').append($c);
+                    
+                    $c.animate({
+                        top: window.innerHeight + 20,
+                        left: startX + (Math.random() - 0.5) * 200,
+                        opacity: 0
+                    }, 800 + Math.random() * 1200, function() {
+                        $(this).remove();
+                    });
+                }
+            }
+
+            // Events
+            $('#btn-suggest').on('click', () => {
+                const total = parseFormattedNumber($('#total-amount').val()) || 1000000;
+                const count = parseInt($('#envelope-count').val()) || 10;
+                const avg = total / count;
+                const suggestedMin = Math.max(10000, Math.floor((avg * 0.4) / 10000) * 10000);
+                const suggestedMax = Math.floor((avg * 1.8) / 10000) * 10000;
+                $('#min-val').val(formatNumber(suggestedMin));
+                $('#max-val').val(formatNumber(suggestedMax));
+                updatePreview();
+            });
+
+            $('#btn-save').on('click', () => {
+                if (updatePreview()) {
+                    localStorage.setItem('lixi_config_standalone', JSON.stringify({
+                        total: currentConfig.total,
+                        count: currentConfig.count,
+                        min: currentConfig.min,
+                        max: currentConfig.max
+                    }));
+                    alert("Đã lưu cấu hình!");
+                }
+            });
+
+            $('#btn-start-game').on('click', () => {
+                if (updatePreview()) {
+                    $('#setup-screen').fadeOut(200);
+                    $('#main-header').fadeOut(200, () => {
+                        $('#game-screen').fadeIn();
+                        renderGame();
+                        window.scrollTo(0, 0);
+                    });
+                }
+            });
+
+            $('#btn-back').on('click', () => {
+                $('#game-screen').fadeOut(200, () => {
+                    $('#main-header').fadeIn(200);
+                    $('#setup-screen').fadeIn(200);
+                });
+            });
+
+            $('#btn-shuffle').on('click', () => {
+                $('.lixi-wrapper').removeClass('open');
+                setTimeout(() => renderGame(), 300);
+            });
+
+            function renderGame() {
+                const $grid = $('#lixi-grid');
+                const count = currentConfig.count;
+                $grid.empty().removeClass('grid-small grid-medium grid-large');
+                
+                if (count <= 12) {
+                    $grid.addClass('grid-small');
+                    $grid.css('grid-template-columns', 'repeat(auto-fit, minmax(100px, 1fr))');
+                } else if (count <= 24) {
+                    $grid.addClass('grid-medium');
+                    $grid.css('grid-template-columns', 'repeat(auto-fit, minmax(70px, 1fr))');
+                } else {
+                    $grid.addClass('grid-large');
+                    const minW = window.innerWidth < 480 ? '55px' : '70px';
+                    $grid.css('grid-template-columns', `repeat(auto-fit, minmax(${minW}, 1fr))`);
+                }
+                
+                const gameAmounts = [...currentConfig.amounts].sort(() => Math.random() - 0.5);
+
+                gameAmounts.forEach((amt) => {
+                    const html = `
+                        <div class="lixi-wrapper">
+                            <div class="lixi-card">
+                                <div class="lixi-front"></div>
+                                <div class="lixi-back">
+                                    <div class="amount-text">${formatNumber(amt)}đ</div>
+                                    <div class="congrats-text">An khang thịnh vượng</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    const $el = $(html);
+                    $grid.append($el);
+
+                    $el.on('click', function() {
+                        if ($(this).hasClass('open')) return;
+                        $(this).addClass('open').find('.lixi-card').addClass('animate-pop');
+                        createConfetti();
+                    });
+                });
+            }
+
+            // Init
+            const saved = localStorage.getItem('lixi_config_standalone');
+            if (saved) {
+                try {
+                    const config = JSON.parse(saved);
+                    $('#total-amount').val(formatNumber(config.total));
+                    $('#envelope-count').val(config.count);
+                    $('#min-val').val(formatNumber(config.min));
+                    $('#max-val').val(formatNumber(config.max));
+                    updatePreview();
+                } catch (e) { updatePreview(); }
+            } else { updatePreview(); }
+        });
+    </script>
 </body>
 </html>
