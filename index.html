@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Rút Bao Lì Xì May Mắn</title>
+    <title>Rút Bao Lì Xì May Mắn 2025</title>
     <!-- jQuery CDN -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <style>
@@ -15,20 +15,23 @@
             --gold-dark: #ffa000;
             --white: #ffffff;
             --bg-color: #fff8f8;
-            --shadow: 0 4px 20px rgba(0,0,0,0.15);
+            --shadow: 0 4px 15px rgba(0,0,0,0.15);
             --text-dark: #2c3e50;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden; /* Ngăn scroll toàn trang */
+        }
 
         body {
             background-color: var(--bg-color);
             background-image: radial-gradient(#ffcdd2 0.8px, transparent 0.8px);
             background-size: 20px 20px;
             color: var(--text-dark);
-            min-height: 100vh;
-            padding: 10px;
-            overflow-x: hidden;
             display: flex;
             flex-direction: column;
         }
@@ -37,68 +40,53 @@
             width: 100%;
             max-width: 1200px;
             margin: 0 auto;
-            flex: 1;
+            height: 100%;
             display: flex;
             flex-direction: column;
+            padding: 10px;
         }
 
         header {
             text-align: center;
-            margin-bottom: 10px;
-            animation: fadeIn 1s ease-in;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            padding: 10px 0;
+            flex-shrink: 0;
         }
 
         h1 {
             color: var(--red-primary);
             text-shadow: 1px 1px 0px var(--gold);
-            font-size: clamp(1.5rem, 5vw, 2.5rem);
-            margin-bottom: 5px;
+            font-size: clamp(1.5rem, 6vw, 2.2rem);
             font-weight: 800;
         }
 
-        .card {
+        /* Setup Screen */
+        #setup-screen {
             background: var(--white);
             border-radius: 20px;
-            padding: clamp(10px, 3vw, 25px);
+            padding: 20px;
             box-shadow: var(--shadow);
-            margin-bottom: 10px;
             border: 2px solid #ffcdd2;
+            overflow-y: auto; /* Cho phép scroll trong box cấu hình nếu cần */
         }
 
-        /* Form Styling */
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 10px;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 12px;
         }
 
-        .form-group { margin-bottom: 8px; }
+        .form-group { margin-bottom: 5px; }
         label { display: block; margin-bottom: 4px; font-weight: bold; color: var(--red-dark); font-size: 0.75rem; }
         
         input {
             width: 100%;
-            padding: 10px 12px;
+            padding: 10px;
             border: 2px solid #fce4ec;
             border-radius: 10px;
             font-size: 0.9rem;
-            transition: all 0.2s;
             background: #ffffff;
             color: var(--text-dark);
             font-weight: 600;
-        }
-        input:focus { 
-            border-color: var(--red-primary); 
-            outline: none; 
-            box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.1);
-        }
-
-        .money-input {
-            color: var(--red-primary);
         }
 
         .btn-group { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 15px; }
@@ -109,9 +97,7 @@
             border-radius: 10px;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.2s;
             text-transform: uppercase;
-            min-width: 100px;
             font-size: 0.75rem;
             display: flex;
             align-items: center;
@@ -121,9 +107,7 @@
         .btn-suggest { background: #607d8b; color: white; }
         .btn-save { background: var(--gold); color: #5d4037; }
         .btn-start { background: var(--red-primary); color: white; }
-        button:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
 
-        /* Preview Area */
         .preview-container {
             margin-top: 10px;
             padding: 10px;
@@ -132,202 +116,103 @@
             display: none;
             border: 1px solid var(--gold-dark);
         }
-        .preview-header {
-            margin-bottom: 3px;
-            font-weight: 800;
-            color: var(--red-dark);
-            font-size: 0.75rem;
-            text-align: center;
-        }
-        .preview-total {
-            text-align: center;
-            font-size: 0.9rem;
-            font-weight: 900;
-            color: var(--red-primary);
-            margin-bottom: 8px;
-            padding-bottom: 5px;
-            border-bottom: 1px dashed rgba(211, 47, 47, 0.2);
-        }
-        .preview-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-            gap: 5px;
-        }
-        .preview-item {
-            background: white;
-            padding: 5px;
-            border-radius: 6px;
-            text-align: center;
-            font-size: 0.7rem;
-            font-weight: bold;
-            color: var(--red-primary);
-            border: 1px solid #ffe082;
-        }
+        .preview-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 4px; margin-top: 5px;}
+        .preview-item { background: white; padding: 4px; border-radius: 6px; text-align: center; font-size: 0.65rem; color: var(--red-primary); border: 1px solid #ffe082; }
 
-        /* Game UI */
+        /* Game Screen - Fill viewport */
         #game-screen { 
             display: none; 
             flex: 1;
-            display: flex;
             flex-direction: column;
-            padding-bottom: 80px; 
+            overflow: hidden;
+            position: relative;
         }
         
+        /* Floating Controls */
         .bubble-controls {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
             z-index: 1000;
         }
 
         .bubble-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width: 50px; height: 50px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25); border: 3px solid var(--gold);
+            background: var(--white); cursor: pointer;
             font-size: 1.2rem;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.25);
-            border: 2px solid var(--gold);
-            padding: 0;
-            min-width: unset;
-            flex: none;
         }
-
-        .btn-settings { background: #607d8b; color: white; }
-        .btn-refresh { background: var(--red-primary); color: white; }
 
         .lixi-grid {
             display: grid;
-            gap: 8px;
-            justify-items: center;
+            gap: 12px;
             width: 100%;
-            margin: auto 0;
-            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-        }
-
-        .grid-small .lixi-wrapper { max-width: 120px; }
-        .grid-medium .lixi-wrapper { max-width: 80px; }
-        .grid-large .lixi-wrapper { max-width: 60px; }
-
-        @media (min-width: 768px) {
-            .lixi-grid { gap: 15px; }
-            .grid-small .lixi-wrapper { max-width: 160px; }
-            .grid-medium .lixi-wrapper { max-width: 110px; }
-            .grid-large .lixi-wrapper { max-width: 85px; }
-            .bubble-btn { width: 60px; height: 60px; font-size: 1.5rem; }
+            height: 100%;
+            justify-content: center;
+            align-content: center; /* Gom các bao lì xì lại trung tâm */
+            padding: 10px;
         }
 
         .lixi-wrapper {
             width: 100%;
-            aspect-ratio: 3 / 4.5;
+            max-width: 180px; /* Tăng max-width để bao lì xì to hơn */
+            aspect-ratio: 3 / 4.3;
             perspective: 1000px;
             cursor: pointer;
+            margin: 0 auto;
+            transition: transform 0.2s;
         }
+        .lixi-wrapper:active { transform: scale(0.95); }
 
         .lixi-card {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 100%; height: 100%; position: relative;
+            transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .lixi-wrapper.open .lixi-card {
-            transform: rotateY(180deg);
-        }
+        .lixi-wrapper.open .lixi-card { transform: rotateY(180deg); }
 
         .lixi-front, .lixi-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            border-radius: 8px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            border: 2px solid var(--gold);
+            position: absolute; width: 100%; height: 100%;
+            backface-visibility: hidden; border-radius: 12px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15); border: 3px solid var(--gold);
         }
 
-        .lixi-front {
-            background: linear-gradient(135deg, var(--red-primary), var(--red-dark));
-            color: var(--gold);
-        }
+        .lixi-front { background: linear-gradient(135deg, var(--red-primary), var(--red-dark)); color: var(--gold); }
+        .lixi-front::before { content: '🧧'; font-size: clamp(1.8rem, 8vw, 3.5rem); }
+        .lixi-front::after { content: 'Lì xì'; font-weight: 700; font-size: 0.8rem; margin-top: 6px; }
 
-        .lixi-front::before {
-            content: '🧧';
-            font-size: clamp(1.2rem, 4vw, 2.5rem);
-        }
-        .lixi-front::after {
-            content: 'Lì xì';
-            font-weight: 600;
-            font-size: clamp(0.5rem, 2vw, 0.9rem);
-            text-align: center;
-        }
+        .lixi-back { background: #fff; color: var(--red-dark); transform: rotateY(180deg); padding: 8px; text-align: center; }
+        .amount-text { font-size: clamp(0.8rem, 3.5vw, 1.3rem); font-weight: 900; color: var(--red-primary); line-height: 1.1; }
+        .congrats-text { font-size: 0.6rem; color: var(--gold-dark); font-weight: 700; margin-top: 6px; line-height: 1.2; }
 
-        .grid-large .lixi-front::after { display: none; }
-
-        .lixi-back {
-            background: #fff;
-            color: var(--red-dark);
-            transform: rotateY(180deg);
-            padding: 5px;
-            text-align: center;
-        }
-
-        .amount-text {
-            font-size: clamp(0.6rem, 2.5vw, 1.1rem);
-            font-weight: 800;
-            color: var(--red-primary);
-            line-height: 1.1;
-        }
-
-        .congrats-text {
-            font-size: clamp(0.4rem, 1.5vw, 0.7rem);
-            color: var(--gold-dark);
-            font-weight: 600;
-            margin-top: 2px;
-        }
-
-        .confetti {
-            position: fixed;
-            width: 6px;
-            height: 6px;
-            z-index: 9999;
-            pointer-events: none;
-        }
-
-        @keyframes popOut {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
+        .confetti { position: fixed; width: 6px; height: 6px; z-index: 9999; pointer-events: none; }
+        
+        @keyframes popOut { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
         .animate-pop { animation: popOut 0.4s ease; }
 
-        .hidden { display: none !important; }
+        /* Responsive Grid Logic */
+        @media (max-width: 480px) {
+            .lixi-grid { gap: 10px; }
+            .lixi-wrapper { max-width: 140px; }
+            /* Force 2 columns on small screens to fill width and height better */
+            .grid-2cols { grid-template-columns: repeat(2, 1fr) !important; }
+            .grid-3cols { grid-template-columns: repeat(3, 1fr) !important; }
+        }
     </style>
-<script type="importmap">
-{
-  "imports": {
-    "jquery": "https://esm.sh/jquery@^4.0.0"
-  }
-}
-</script>
 </head>
 <body>
 
     <div class="container">
         <header id="main-header">
-            <h1>LÌ XÌ TẾT</h1>
+            <h1>LÌ XÌ TẾT 2025</h1>
         </header>
 
-        <!-- Configuration Screen -->
+        <!-- Setup Area -->
         <div id="setup-screen" class="card">
             <div class="form-grid">
                 <div class="form-group">
@@ -355,248 +240,178 @@
             </div>
 
             <div id="preview-container" class="preview-container">
-                <div class="preview-header">Danh sách lộc dự kiến:</div>
-                <div id="preview-total" class="preview-total">Tổng cộng: 0đ</div>
+                <div id="preview-total" style="text-align:center; font-weight:bold; color:var(--red-primary); font-size: 0.9rem;"></div>
                 <div id="preview-list" class="preview-list"></div>
             </div>
         </div>
 
-        <!-- Game Screen -->
-        <div id="game-screen" style="display: none;">
-            <div class="bubble-controls">
-                <button class="bubble-btn btn-settings" id="btn-back" title="Cấu hình">⚙️</button>
-                <button class="bubble-btn btn-refresh" id="btn-shuffle" title="Làm mới">🔄</button>
-            </div>
+        <!-- Game Area -->
+        <div id="game-screen">
             <div class="lixi-grid" id="lixi-grid"></div>
+            <div class="bubble-controls">
+                <button class="bubble-btn" id="btn-back" title="Cấu hình">⚙️</button>
+                <button class="bubble-btn" id="btn-shuffle" title="Làm mới">🔄</button>
+            </div>
         </div>
     </div>
 
     <script>
         $(function() {
-            let currentConfig = {
-                total: 1000000,
-                count: 10,
-                min: 20000,
-                max: 200000,
-                amounts: []
-            };
+            let config = { total: 1000000, count: 10, min: 20000, max: 200000, amounts: [] };
 
-            // Format Helpers
-            function formatNumber(n) {
-                return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-            }
-
-            function parseFormattedNumber(s) {
-                return parseInt(s.replace(/\./g, '')) || 0;
-            }
+            function formatNum(n) { return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
+            function parseNum(s) { return parseInt(s.replace(/\./g, '')) || 0; }
 
             $(document).on('input', '.money-input', function() {
-                let val = $(this).val();
-                let numeric = val.replace(/\D/g, '');
-                if (numeric) {
-                    $(this).val(formatNumber(parseInt(numeric)));
-                } else {
-                    $(this).val('');
-                }
+                let v = $(this).val().replace(/\D/g, '');
+                $(this).val(v ? formatNum(parseInt(v)) : '');
+                updatePreview();
             });
+            $('#envelope-count').on('input', updatePreview);
 
-            // Core Logic
-            function calculateAmounts(total, count, min, max) {
-                if (total % 10000 !== 0 || min % 10000 !== 0 || max % 10000 !== 0) {
-                    alert("Các giá trị tiền phải chia hết cho 10.000đ để đúng phong tục!");
-                    return null;
-                }
-                
-                const U_TOTAL = total / 10000;
-                const U_MIN = min / 10000;
-                const U_MAX = max / 10000;
-
-                const minSum = (count * U_MIN) + (count * (count - 1) / 2);
-                const maxSum = (count * U_MAX) - (count * (count - 1) / 2);
-
-                if (U_TOTAL < minSum || U_TOTAL > maxSum) {
-                    alert(`Lỗi: Không thể chia tiền với cấu hình này.\nVới ${count} người, tổng tiền phải từ ${formatNumber(minSum * 10000)}đ đến ${formatNumber(maxSum * 10000)}đ`);
-                    return null;
-                }
+            function calculate(total, count, min, max) {
+                if (total % 10000 !== 0 || min % 10000 !== 0 || max % 10000 !== 0) return null;
+                const ut = total / 10000, umin = min / 10000, umax = max / 10000;
+                const minS = (count * umin) + (count * (count - 1) / 2);
+                const maxS = (count * umax) - (count * (count - 1) / 2);
+                if (ut < minS || ut > maxS) return null;
 
                 let units = [];
-                for (let i = 0; i < count; i++) {
-                    units.push(U_MIN + i);
-                }
+                for (let i = 0; i < count; i++) units.push(umin + i);
+                let diff = ut - units.reduce((a, b) => a + b, 0);
 
-                let currentSum = units.reduce((a, b) => a + b, 0);
-                let deficit = U_TOTAL - currentSum;
-
-                while (deficit > 0) {
+                while (diff > 0) {
                     let changed = false;
                     for (let i = count - 1; i >= 0; i--) {
-                        if (deficit <= 0) break;
-                        const upperLimit = (i === count - 1) ? U_MAX : units[i + 1] - 1;
-                        const canAdd = upperLimit - units[i];
-                        if (canAdd > 0) {
-                            const add = Math.min(canAdd, deficit);
-                            units[i] += add;
-                            deficit -= add;
-                            changed = true;
+                        if (diff <= 0) break;
+                        let up = (i === count - 1) ? umax : units[i + 1] - 1;
+                        let can = up - units[i];
+                        if (can > 0) {
+                            let add = Math.min(can, diff);
+                            units[i] += add; diff -= add; changed = true;
                         }
                     }
                     if (!changed) break;
                 }
-
                 return units.map(u => u * 10000);
             }
 
             function updatePreview() {
-                const totalInput = parseFormattedNumber($('#total-amount').val());
+                const total = parseNum($('#total-amount').val());
                 const count = parseInt($('#envelope-count').val());
-                const min = parseFormattedNumber($('#min-val').val());
-                const max = parseFormattedNumber($('#max-val').val());
-
-                const result = calculateAmounts(totalInput, count, min, max);
-                if (result) {
-                    currentConfig = { total: totalInput, count, min, max, amounts: result };
-                    const actualTotal = result.reduce((a, b) => a + b, 0);
-                    $('#preview-total').text(`Tổng cộng: ${formatNumber(actualTotal)}đ`);
-
-                    const $list = $('#preview-list');
-                    $list.empty();
-                    [...result].sort(() => Math.random() - 0.5).forEach(amt => {
-                        $list.append(`<div class="preview-item">${formatNumber(amt)}đ</div>`);
-                    });
-                    $('#preview-container').fadeIn();
+                const min = parseNum($('#min-val').val());
+                const max = parseNum($('#max-val').val());
+                const res = calculate(total, count, min, max);
+                if (res) {
+                    config = { total, count, min, max, amounts: res };
+                    $('#preview-total').text(`Tổng cộng: ${formatNum(res.reduce((a,b)=>a+b,0))}đ`);
+                    const $list = $('#preview-list').empty();
+                    [...res].sort(()=>Math.random()-0.5).forEach(amt => $list.append(`<div class="preview-item">${formatNum(amt)}đ</div>`));
+                    $('#preview-container').show();
                     return true;
                 }
+                $('#preview-container').hide();
                 return false;
             }
 
-            function createConfetti() {
-                const colors = ['#f44336', '#ffcf33', '#ffa000', '#ffffff', '#ff1744'];
-                for (let i = 0; i < 25; i++) {
-                    const $c = $('<div class="confetti"></div>');
-                    const startX = Math.random() * window.innerWidth;
-                    const startY = -20;
-                    const color = colors[Math.floor(Math.random() * colors.length)];
-                    
-                    $c.css({
-                        left: startX,
-                        top: startY,
-                        backgroundColor: color,
-                        transform: `rotate(${Math.random() * 360}deg)`
-                    });
-                    
-                    $('body').append($c);
-                    
-                    $c.animate({
-                        top: window.innerHeight + 20,
-                        left: startX + (Math.random() - 0.5) * 200,
-                        opacity: 0
-                    }, 800 + Math.random() * 1200, function() {
-                        $(this).remove();
-                    });
-                }
-            }
-
-            // Events
-            $('#btn-suggest').on('click', () => {
-                const total = parseFormattedNumber($('#total-amount').val()) || 1000000;
-                const count = parseInt($('#envelope-count').val()) || 10;
-                const avg = total / count;
-                const suggestedMin = Math.max(10000, Math.floor((avg * 0.4) / 10000) * 10000);
-                const suggestedMax = Math.floor((avg * 1.8) / 10000) * 10000;
-                $('#min-val').val(formatNumber(suggestedMin));
-                $('#max-val').val(formatNumber(suggestedMax));
+            $('#btn-suggest').click(() => {
+                const t = parseNum($('#total-amount').val()) || 1000000;
+                const c = parseInt($('#envelope-count').val()) || 10;
+                const avg = t / c;
+                $('#min-val').val(formatNum(Math.max(10000, Math.floor(avg * 0.4 / 10000) * 10000)));
+                $('#max-val').val(formatNum(Math.floor(avg * 1.8 / 10000) * 10000));
                 updatePreview();
             });
 
-            $('#btn-save').on('click', () => {
+            $('#btn-save').click(() => {
                 if (updatePreview()) {
-                    localStorage.setItem('lixi_config_standalone', JSON.stringify({
-                        total: currentConfig.total,
-                        count: currentConfig.count,
-                        min: currentConfig.min,
-                        max: currentConfig.max
-                    }));
-                    alert("Đã lưu cấu hình!");
+                    localStorage.setItem('lixi_v6_final', JSON.stringify({t:config.total, c:config.count, mn:config.min, mx:config.max}));
+                    alert("Cấu hình đã được lưu!");
                 }
             });
 
-            $('#btn-start-game').on('click', () => {
+            $('#btn-start-game').click(() => {
                 if (updatePreview()) {
-                    $('#setup-screen').fadeOut(200);
-                    $('#main-header').fadeOut(200, () => {
-                        $('#game-screen').fadeIn();
+                    $('#setup-screen, #main-header').fadeOut(300, () => {
+                        $('#game-screen').css('display', 'flex').hide().fadeIn(300);
                         renderGame();
-                        window.scrollTo(0, 0);
                     });
-                }
+                } else { alert("Cấu hình chưa hợp lệ! Vui lòng kiểm tra lại ngân sách và số lượng."); }
             });
 
-            $('#btn-back').on('click', () => {
-                $('#game-screen').fadeOut(200, () => {
-                    $('#main-header').fadeIn(200);
-                    $('#setup-screen').fadeIn(200);
-                });
+            $('#btn-back').click(() => {
+                $('#game-screen').fadeOut(300, () => $('#main-header, #setup-screen').fadeIn(300));
             });
 
-            $('#btn-shuffle').on('click', () => {
+            $('#btn-shuffle').click(() => {
                 $('.lixi-wrapper').removeClass('open');
-                setTimeout(() => renderGame(), 300);
+                setTimeout(renderGame, 400);
             });
 
             function renderGame() {
-                const $grid = $('#lixi-grid');
-                const count = currentConfig.count;
-                $grid.empty().removeClass('grid-small grid-medium grid-large');
+                const $grid = $('#lixi-grid').empty();
+                const n = config.count;
                 
-                if (count <= 12) {
-                    $grid.addClass('grid-small');
-                    $grid.css('grid-template-columns', 'repeat(auto-fit, minmax(100px, 1fr))');
-                } else if (count <= 24) {
-                    $grid.addClass('grid-medium');
-                    $grid.css('grid-template-columns', 'repeat(auto-fit, minmax(70px, 1fr))');
+                $grid.removeClass('grid-2cols grid-3cols');
+
+                // Intelligent column selection to fill the screen
+                let cols = 2;
+                if (window.innerWidth <= 480) {
+                    // Mobile
+                    if (n <= 4) cols = 2;
+                    else if (n <= 9) cols = 3;
+                    else if (n <= 12) { cols = 3; $grid.addClass('grid-3cols'); }
+                    else if (n <= 16) cols = 4;
+                    else if (n <= 25) cols = 5;
+                    else cols = 6;
                 } else {
-                    $grid.addClass('grid-large');
-                    const minW = window.innerWidth < 480 ? '55px' : '70px';
-                    $grid.css('grid-template-columns', `repeat(auto-fit, minmax(${minW}, 1fr))`);
+                    // Tablet/Desktop
+                    if (n <= 4) cols = n;
+                    else if (n <= 10) cols = 5;
+                    else if (n <= 20) cols = 6;
+                    else cols = 10;
                 }
                 
-                const gameAmounts = [...currentConfig.amounts].sort(() => Math.random() - 0.5);
-
-                gameAmounts.forEach((amt) => {
-                    const html = `
+                $grid.css('grid-template-columns', `repeat(${cols}, 1fr)`);
+                
+                const randomized = [...config.amounts].sort(() => Math.random() - 0.5);
+                randomized.forEach(amt => {
+                    const $el = $(`
                         <div class="lixi-wrapper">
                             <div class="lixi-card">
                                 <div class="lixi-front"></div>
                                 <div class="lixi-back">
-                                    <div class="amount-text">${formatNumber(amt)}đ</div>
-                                    <div class="congrats-text">An khang thịnh vượng</div>
+                                    <div class="amount-text">${formatNum(amt)}đ</div>
+                                    <div class="congrats-text">An khang thịnh vượng - Vạn sự như ý</div>
                                 </div>
                             </div>
                         </div>
-                    `;
-                    const $el = $(html);
+                    `);
                     $grid.append($el);
-
-                    $el.on('click', function() {
-                        if ($(this).hasClass('open')) return;
-                        $(this).addClass('open').find('.lixi-card').addClass('animate-pop');
-                        createConfetti();
+                    $el.click(function() {
+                        if (!$(this).hasClass('open')) {
+                            $(this).addClass('open').find('.lixi-card').addClass('animate-pop');
+                            const colors = ['#f44336', '#ffcf33', '#ffa000', '#ffffff'];
+                            for (let i = 0; i < 20; i++) {
+                                const $c = $('<div class="confetti"></div>').css({
+                                    left: Math.random() * window.innerWidth, top: -10,
+                                    backgroundColor: colors[Math.floor(Math.random() * colors.length)]
+                                });
+                                $('body').append($c);
+                                $c.animate({ top: window.innerHeight + 20, opacity: 0 }, 800 + Math.random() * 800, function() { $(this).remove(); });
+                            }
+                        }
                     });
                 });
             }
 
-            // Init
-            const saved = localStorage.getItem('lixi_config_standalone');
+            const saved = localStorage.getItem('lixi_v6_final');
             if (saved) {
-                try {
-                    const config = JSON.parse(saved);
-                    $('#total-amount').val(formatNumber(config.total));
-                    $('#envelope-count').val(config.count);
-                    $('#min-val').val(formatNumber(config.min));
-                    $('#max-val').val(formatNumber(config.max));
-                    updatePreview();
-                } catch (e) { updatePreview(); }
-            } else { updatePreview(); }
+                const s = JSON.parse(saved);
+                $('#total-amount').val(formatNum(s.t)); $('#envelope-count').val(s.c);
+                $('#min-val').val(formatNum(s.mn)); $('#max-val').val(formatNum(s.mx));
+            }
+            updatePreview();
         });
     </script>
 </body>
