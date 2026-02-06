@@ -4,58 +4,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Rút Bao Lì Xì May Mắn - Tết 2025</title>
+    <title>Lì Xì Tết - Vạn Sự Như Ý</title>
+    <!-- Fonts & Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- Scripts -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Quicksand:wght@400;600;700&display=swap');
-
         :root {
             --red-primary: #d32f2f;
             --red-dark: #b71c1c;
             --gold: #ffcf33;
-            --gold-dark: #ffa000;
+            --gold-light: #fff9f0;
         }
 
         body {
-            background-color: #fff8f8;
-            background-image: radial-gradient(#ffcdd2 0.8px, transparent 0.8px);
-            background-size: 20px 20px;
-            overflow-x: hidden;
-            user-select: none;
+            margin: 0;
+            padding: 0;
+            background-color: var(--gold-light);
+            font-family: 'Montserrat', sans-serif;
             -webkit-tap-highlight-color: transparent;
-            font-family: 'Quicksand', sans-serif;
+            user-select: none;
+            overflow-x: hidden;
+            min-height: 100vh;
         }
 
-        .font-festive { font-family: 'Montserrat', sans-serif; }
-        
-        .overlay-blur {
-            backdrop-filter: blur(15px);
-            background-color: rgba(0, 0, 0, 0.85);
+        .font-festive {
+            font-family: 'Dancing Script', cursive;
         }
 
+        /* Confetti Animation */
         .confetti-particle {
             position: fixed;
-            pointer-events: none;
             z-index: 1000;
+            pointer-events: none;
             animation: fall linear forwards;
         }
-
         @keyframes fall {
-            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+            0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+            90% { opacity: 1; }
             100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
         }
 
+        /* Overlay */
+        .overlay-blur {
+            backdrop-filter: blur(25px);
+            background: rgba(0, 0, 0, 0.88);
+            display: none; /* jQuery control */
+        }
+
         .entrance-pop {
-            animation: popUp 0.6s cubic-bezier(0.17, 0.89, 0.32, 1.28) forwards;
+            animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+        }
+        @keyframes pop {
+            from { transform: scale(0.6); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
 
-        @keyframes popUp {
-            from { transform: scale(0.5) translateY(50px); opacity: 0; }
-            to { transform: scale(1) translateY(0); opacity: 1; }
-        }
-
-        /* Hiệu ứng tia sáng quét qua */
+        /* Shimmer Effect */
         .shimmer {
             position: relative;
             overflow: hidden;
@@ -63,11 +70,8 @@
         .shimmer::after {
             content: "";
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.15), transparent);
             transform: rotate(45deg);
             animation: shimmer 3s infinite;
         }
@@ -75,300 +79,431 @@
             0% { transform: translateX(-100%) rotate(45deg); }
             100% { transform: translateX(100%) rotate(45deg); }
         }
+
+        /* Digit Reveal Logic */
+        .digit-reveal-cover {
+            clip-path: inset(0 0 0 0);
+            transition-property: clip-path;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .digit-box.revealed .digit-reveal-cover {
+            clip-path: inset(0 0 100% 0);
+        }
+
+        .lixi-opened {
+            opacity: 0.5;
+            filter: grayscale(0.8);
+            pointer-events: none;
+        }
+
+        .custom-shadow-reveal {
+            box-shadow: 0 0 120px rgba(255, 207, 51, 0.25);
+        }
+
+        .btn-gold-gradient {
+            background: linear-gradient(180deg, #ffcf33 0%, #ffa000 100%);
+            box-shadow: 0 10px 40px rgba(255, 160, 0, 0.6);
+        }
+
+        /* Hide scrollbar */
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
     </style>
-    <script type="importmap">
-    {
-      "imports": {
-        "react": "https://esm.sh/react@^19.2.4",
-        "react/": "https://esm.sh/react@^19.2.4/",
-        "react-dom": "https://esm.sh/react-dom@^19.2.4",
-        "react-dom/": "https://esm.sh/react-dom@^19.2.4/"
-      }
-    }
-    </script>
 </head>
 <body>
-    <div id="root"></div>
 
-    <script type="module">
-        import React, { useState, useEffect, useMemo, useRef } from 'react';
-        import { createRoot } from 'react-dom';
+    <div class="container mx-auto px-4 py-8 flex flex-col items-center max-w-4xl min-h-screen">
+        <!-- Header -->
+        <header id="main-header" class="text-center mb-8 flex flex-col items-center">
+            <h1 class="text-5xl sm:text-7xl font-festive font-black text-[#d32f2f] drop-shadow-sm tracking-tighter">
+                LÌ XÌ <span class="text-[#ffa000]">TẾT</span>
+            </h1>
+            <div class="h-1.5 w-32 bg-gradient-to-r from-transparent via-[#ffcf33] to-transparent mt-3"></div>
+            <p class="text-red-800 font-bold tracking-[0.3em] uppercase text-[0.6rem] sm:text-xs opacity-70 mt-2">
+                Chúc Mừng Năm Mới • Vạn Sự Như Ý
+            </p>
+        </header>
 
-        // --- CONSTANTS ---
-        const STORAGE_KEY = 'lixi_v9_consolidated';
-        const CONFETTI_COLORS = ['#f44336', '#ffcf33', '#ffa000', '#ffffff', '#e91e63'];
+        <!-- Main Content Wrapper -->
+        <main class="w-full flex justify-center items-center flex-1 overflow-hidden">
+            <!-- SETUP SCREEN -->
+            <div id="setup-screen" class="bg-white rounded-[2.5rem] p-8 shadow-2xl border-2 border-red-100 max-w-2xl mx-auto w-full overflow-y-auto max-h-[85vh]">
+                <h2 class="text-3xl font-festive font-extrabold text-[#d32f2f] mb-8 text-center uppercase tracking-tight">Cấu hình Lì Xì</h2>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+                    <div class="flex flex-col gap-2">
+                        <label class="text-xs font-bold text-red-800 uppercase tracking-widest">Tổng ngân sách (VNĐ)</label>
+                        <input type="text" id="total-input" value="1.000.000" class="money-input p-4 border-2 border-red-50 rounded-2xl bg-red-50/30 font-bold focus:outline-none focus:border-red-300 transition-colors text-center" />
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <label class="text-xs font-bold text-red-800 uppercase tracking-widest">Số bao lì xì</label>
+                        <input type="number" id="count-input" value="10" min="1" max="100" class="p-4 border-2 border-red-50 rounded-2xl bg-red-50/30 font-bold focus:outline-none focus:border-red-300 transition-colors text-center" />
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <label class="text-xs font-bold text-red-800 uppercase tracking-widest">Lộc tối thiểu (VNĐ)</label>
+                        <input type="text" id="min-input" value="20.000" class="money-input p-4 border-2 border-red-50 rounded-2xl bg-red-50/30 font-bold focus:outline-none focus:border-red-300 transition-colors text-center" />
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <label class="text-xs font-bold text-red-800 uppercase tracking-widest">Lộc tối đa (VNĐ)</label>
+                        <input type="text" id="max-input" value="200.000" class="money-input p-4 border-2 border-red-50 rounded-2xl bg-red-50/30 font-bold focus:outline-none focus:border-red-300 transition-colors text-center" />
+                    </div>
+                </div>
 
-        // --- SERVICES ---
-        const calculateAmounts = (total, count, min, max) => {
-            const UNIT = 10000;
-            if (total % UNIT !== 0 || min % UNIT !== 0 || max % UNIT !== 0) return null;
-            const ut = total / UNIT, umin = min / UNIT, umax = max / UNIT;
-            const minS = (count * umin) + (count * (count - 1) / 2);
-            const maxS = (count * umax) - (count * (count - 1) / 2);
-            if (ut < minS || ut > maxS) return null;
+                <div class="flex flex-wrap gap-3 mb-8">
+                    <button id="btn-suggest" class="flex-1 min-w-[120px] bg-slate-500 hover:bg-slate-600 text-white font-bold py-4 rounded-2xl transition-all shadow-md active:scale-95 flex items-center justify-center gap-2 text-xs uppercase tracking-widest">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Gợi ý
+                    </button>
+                    <button id="btn-save" class="flex-1 min-w-[120px] bg-yellow-400 hover:bg-yellow-500 text-amber-900 font-bold py-4 rounded-2xl transition-all shadow-md active:scale-95 flex items-center justify-center gap-2 text-xs uppercase tracking-widest">
+                        <i class="fa-solid fa-floppy-disk"></i> Lưu
+                    </button>
+                    <button id="btn-start" class="flex-1 min-w-[120px] bg-red-600 hover:bg-red-700 text-white font-black py-4 rounded-2xl transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2 text-xs uppercase tracking-[0.2em]">
+                        <i class="fa-solid fa-rocket"></i> Bắt đầu
+                    </button>
+                </div>
 
-            let units = [];
-            for (let i = 0; i < count; i++) units.push(umin + i);
-            let diff = ut - units.reduce((a, b) => a + b, 0);
+                <div id="preview-box" class="hidden bg-yellow-50 border border-yellow-200 rounded-3xl p-6 mb-6">
+                    <div id="preview-header" class="text-center font-black text-red-700 text-sm mb-4 uppercase tracking-widest">Phân bổ dự kiến</div>
+                    <div id="preview-list" class="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3"></div>
+                </div>
 
-            while (diff > 0) {
-                let changed = false;
-                for (let i = count - 1; i >= 0; i--) {
-                    if (diff <= 0) break;
-                    const up = (i === count - 1) ? umax : units[i + 1] - 1;
-                    const can = up - units[i];
-                    if (can > 0) {
-                        const add = Math.min(can, diff);
-                        units[i] += add; diff -= add; changed = true;
-                    }
-                }
-                if (!changed) break;
-            }
-            return units.map(u => u * UNIT);
-        };
+                <div id="history-box" class="hidden bg-red-50 border border-red-100 rounded-3xl p-6">
+                    <div class="text-center font-black text-red-700 text-sm mb-4 uppercase tracking-widest">Lịch sử nhận lộc</div>
+                    <div id="history-list" class="flex flex-col gap-2 max-h-48 overflow-y-auto pr-2"></div>
+                </div>
 
-        const formatCurrency = (n) => n.toLocaleString('vi-VN');
-        const parseCurrency = (s) => parseInt(s.replace(/\D/g, '')) || 0;
-
-        // --- COMPONENTS ---
-
-        const Confetti = () => {
-            const [particles, setParticles] = useState([]);
-            useEffect(() => {
-                const parts = Array.from({ length: 50 }).map((_, i) => ({
-                    id: Date.now() + i,
-                    x: Math.random() * 100,
-                    color: CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)],
-                    duration: 1.5 + Math.random() * 2
-                }));
-                setParticles(parts);
-                const timer = setTimeout(() => setParticles([]), 4000);
-                return () => clearTimeout(timer);
-            }, []);
-            return (
-                <>
-                    {particles.map(p => (
-                        <div key={p.id} className="confetti-particle" style={{
-                            left: `${p.x}%`, top: '-20px', width: '8px', height: '8px',
-                            backgroundColor: p.color, borderRadius: Math.random() > 0.5 ? '50%' : '0',
-                            animationDuration: `${p.duration}s`
-                        }} />
-                    ))}
-                </>
-            );
-        };
-
-        const LixiCard = ({ amount, isOpen, onOpen }) => (
-            <div 
-                className={`relative w-full aspect-[3/4.5] cursor-pointer group transition-all duration-500 hover:scale-105 active:scale-95 ${isOpen ? 'opacity-60 grayscale-[0.3]' : ''}`}
-                onClick={onOpen}
-            >
-                <div className="w-full h-full relative rounded-2xl overflow-hidden shadow-xl border-2 border-yellow-400 bg-gradient-to-br from-[#d32f2f] to-[#b71c1c] flex flex-col items-center justify-center shimmer">
-                    {isOpen ? (
-                        <div className="flex flex-col items-center justify-center p-2 text-center animate-in zoom-in duration-300">
-                             <div className="text-yellow-400 font-festive font-black text-sm sm:text-lg leading-none">
-                                {formatCurrency(amount)}đ
-                             </div>
-                             <div className="text-white/70 text-[0.6rem] mt-2 font-bold tracking-widest">ĐÃ MỞ</div>
-                        </div>
-                    ) : (
-                        <div className="flex flex-col items-center justify-center pointer-events-none">
-                            <span className="text-4xl sm:text-5xl mb-2 drop-shadow-lg">🧧</span>
-                            <span className="text-white font-festive font-black text-xs sm:text-sm tracking-[0.2em] uppercase">Lì Xì</span>
-                        </div>
-                    )}
+                <div id="error-msg" class="hidden text-center p-5 bg-red-50 text-red-500 rounded-2xl text-xs font-bold uppercase tracking-widest leading-relaxed mt-4">
+                    Thông số không hợp lệ. Vui lòng kiểm tra lại ngân sách.<br/>(Yêu cầu: Bội số của 10.000đ)
                 </div>
             </div>
-        );
 
-        const SetupScreen = ({ onStart }) => {
-            const [totalStr, setTotalStr] = useState('1.000.000');
-            const [count, setCount] = useState(10);
-            const [minStr, setMinStr] = useState('20.000');
-            const [maxStr, setMaxStr] = useState('200.000');
-            const [previewAmounts, setPreviewAmounts] = useState([]);
+            <!-- GAME SCREEN -->
+            <div id="game-screen" class="hidden w-full flex flex-col items-center">
+                <div id="lixi-grid" class="grid gap-4 w-full mx-auto justify-items-center p-4"></div>
+                
+                <div class="fixed bottom-8 right-8 flex flex-col gap-5 z-50">
+                    <button id="btn-config" title="Cấu hình" class="w-16 h-16 bg-white text-red-600 border-4 border-yellow-400 rounded-full shadow-2xl flex items-center justify-center text-2xl hover:scale-110 transition-transform active:scale-90">
+                        <i class="fa-solid fa-gear"></i>
+                    </button>
+                    <button id="btn-shuffle" title="Làm mới" class="w-16 h-16 bg-white text-red-600 border-4 border-yellow-400 rounded-full shadow-2xl flex items-center justify-center text-2xl hover:scale-110 transition-transform active:scale-90">
+                        <i class="fa-solid fa-rotate"></i>
+                    </button>
+                </div>
+            </div>
+        </main>
 
-            useEffect(() => {
-                const saved = localStorage.getItem(STORAGE_KEY);
-                if (saved) {
-                    const c = JSON.parse(saved);
-                    setTotalStr(formatCurrency(c.total)); setCount(c.count);
-                    setMinStr(formatCurrency(c.min)); setMaxStr(formatCurrency(c.max));
-                }
-            }, []);
+        <footer class="mt-8 py-4 text-red-800/20 text-[0.6rem] font-bold uppercase tracking-[0.5em] text-center">
+            Chúc Mừng Năm Mới &copy; 2025
+        </footer>
+    </div>
 
-            useEffect(() => {
-                const res = calculateAmounts(parseCurrency(totalStr), count, parseCurrency(minStr), parseCurrency(maxStr));
-                setPreviewAmounts(res || []);
-            }, [totalStr, count, minStr, maxStr]);
+    <!-- REVEAL OVERLAY (Initial state hidden via Tailwind hidden) -->
+    <div id="reveal-overlay" class="hidden fixed inset-0 z-[100] flex flex-col items-center justify-center p-4 overlay-blur">
+        <div id="reveal-card" class="relative w-full max-w-[420px] aspect-[3/4.8] entrance-pop custom-shadow-reveal rounded-[3.5rem] overflow-hidden border-[10px] border-yellow-400 bg-white">
+            <div class="absolute inset-0 flex flex-col items-center justify-center p-8 text-center bg-white z-10">
+                <!-- Stars corners -->
+                <div class="absolute top-8 left-8 text-yellow-500 text-2xl opacity-40">❈</div>
+                <div class="absolute top-8 right-8 text-yellow-500 text-2xl opacity-40">❈</div>
+                <div class="absolute bottom-20 left-8 text-yellow-500 text-2xl opacity-40">❈</div>
+                <div class="absolute bottom-20 right-8 text-yellow-500 text-2xl opacity-40">❈</div>
 
-            return (
-                <div className="bg-white rounded-[2rem] p-8 shadow-2xl border-2 border-red-50 max-w-xl mx-auto w-full animate-in fade-in zoom-in duration-500">
-                    <h2 className="text-3xl font-festive font-black text-red-600 mb-8 text-center tracking-tight">CẤU HÌNH LỘC XUÂN</h2>
-                    <div className="grid grid-cols-2 gap-6 mb-8">
-                        <div className="flex flex-col gap-2">
-                            <label className="text-[0.65rem] font-black text-red-800 uppercase tracking-widest">Tổng Ngân Sách</label>
-                            <input type="text" value={totalStr} onChange={e => setTotalStr(formatCurrency(parseCurrency(e.target.value)))} className="p-4 border-2 border-red-50 rounded-2xl bg-red-50/20 font-bold focus:ring-2 focus:ring-red-200 focus:outline-none" />
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            <label className="text-[0.65rem] font-black text-red-800 uppercase tracking-widest">Số Lượng Bao</label>
-                            <input type="number" value={count} onChange={e => setCount(parseInt(e.target.value) || 1)} className="p-4 border-2 border-red-50 rounded-2xl bg-red-50/20 font-bold focus:ring-2 focus:ring-red-200 focus:outline-none" />
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            <label className="text-[0.65rem] font-black text-red-800 uppercase tracking-widest">Lộc Tối Thiểu</label>
-                            <input type="text" value={minStr} onChange={e => setMinStr(formatCurrency(parseCurrency(e.target.value)))} className="p-4 border-2 border-red-50 rounded-2xl bg-red-50/20 font-bold focus:ring-2 focus:ring-red-200 focus:outline-none" />
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            <label className="text-[0.65rem] font-black text-red-800 uppercase tracking-widest">Lộc Tối Đa</label>
-                            <input type="text" value={maxStr} onChange={e => setMaxStr(formatCurrency(parseCurrency(e.target.value)))} className="p-4 border-2 border-red-50 rounded-2xl bg-red-50/20 font-bold focus:ring-2 focus:ring-red-200 focus:outline-none" />
-                        </div>
-                    </div>
-                    <div className="flex gap-3">
-                        <button onClick={() => {
-                            const t = parseCurrency(totalStr); const avg = t / count;
-                            setMinStr(formatCurrency(Math.max(10000, Math.floor(avg*0.4/10000)*10000)));
-                            setMaxStr(formatCurrency(Math.floor(avg*1.8/10000)*10000));
-                        }} className="flex-1 bg-gray-100 text-gray-700 font-bold py-4 rounded-2xl text-xs uppercase tracking-widest hover:bg-gray-200 transition-all active:scale-95">Gợi ý</button>
-                        <button onClick={() => {
-                            const config = { total: parseCurrency(totalStr), count, min: parseCurrency(minStr), max: parseCurrency(maxStr) };
-                            localStorage.setItem(STORAGE_KEY, JSON.stringify(config)); alert("Đã lưu!");
-                        }} className="flex-1 bg-amber-400 text-amber-900 font-bold py-4 rounded-2xl text-xs uppercase tracking-widest hover:bg-amber-500 transition-all active:scale-95">Lưu</button>
-                        <button disabled={previewAmounts.length === 0} onClick={() => onStart({ total: parseCurrency(totalStr), count, min: parseCurrency(minStr), max: parseCurrency(maxStr), amounts: previewAmounts })} className={`flex-[1.5] font-black py-4 rounded-2xl text-xs uppercase tracking-[0.2em] transition-all shadow-lg active:scale-95 ${previewAmounts.length > 0 ? 'bg-red-600 text-white hover:bg-red-700' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}>Bắt đầu 🚀</button>
+                <div class="w-full h-32 flex items-center justify-center mb-6">
+                    <div id="digit-container" class="flex items-center justify-center w-full h-full gap-2 px-2">
+                        <!-- Digits boxes go here -->
                     </div>
                 </div>
-            );
-        };
 
-        const GameScreen = ({ config, onBack }) => {
-            const [openStates, setOpenStates] = useState(new Array(config.count).fill(false));
-            const [shuffledAmounts, setShuffledAmounts] = useState([]);
-            const [triggerConfetti, setTriggerConfetti] = useState(0);
-            const [focusedIndex, setFocusedIndex] = useState(null);
-            const [isRevealing, setIsRevealing] = useState(false);
-
-            useEffect(() => {
-                setShuffledAmounts([...config.amounts].sort(() => Math.random() - 0.5));
-            }, [config.amounts]);
-
-            const maxDigitCount = useMemo(() => config.max.toString().length, [config.max]);
-
-            const revealDetails = useMemo(() => {
-                if (focusedIndex === null) return { items: [], totalTime: 0 };
-                const amountStr = shuffledAmounts[focusedIndex].toString();
-                const paddedStr = amountStr.padStart(maxDigitCount, '0');
-                const chars = paddedStr.split('');
-                const gameFactor = 1 + (openStates.filter(s => s).length / config.count);
+                <div class="mt-4 flex flex-col items-center gap-1">
+                    <div class="text-amber-600 font-bold text-xs sm:text-sm tracking-[0.5em] uppercase opacity-70">Lộc xuân đại cát</div>
+                    <div class="text-red-500 font-black text-2xl sm:text-4xl mt-1 uppercase tracking-tighter drop-shadow-md">PHÁT TÀI PHÁT LỘC</div>
+                </div>
                 
-                let currentDelay = 0;
-                const items = chars.map((char, index) => {
-                    const reverseIndex = maxDigitCount - 1 - index;
-                    const duration = 0.6 * gameFactor + (reverseIndex * 0.75 * gameFactor);
-                    return { char, duration, delay: 0 };
-                });
+                <div class="absolute bottom-24 left-0 right-0 text-red-50 text-[18rem] opacity-10 pointer-events-none select-none font-festive flex justify-center leading-none">福</div>
+                
+                <div id="reveal-tap-hint" class="absolute bottom-16 left-0 right-0 text-red-400 text-[0.7rem] font-black uppercase tracking-[0.4em] px-4 opacity-50">
+                    CHẠM ĐỂ HOÀN TẤT
+                </div>
 
-                for (let i = maxDigitCount - 1; i >= 0; i--) {
-                    items[i].delay = currentDelay;
-                    currentDelay += items[i].duration * 0.75;
+                <!-- Input name field -->
+                <div id="receiver-input-container" class="hidden absolute bottom-28 w-[80%] z-20">
+                    <input type="text" id="receiver-name" placeholder="Nhập tên người nhận..." class="w-full p-4 border-2 border-yellow-200 rounded-2xl bg-yellow-50/50 text-red-700 font-bold text-center focus:outline-none focus:border-yellow-400 transition-all text-sm shadow-inner" />
+                </div>
+            </div>
+        </div>
+        
+        <div id="reveal-status-area" class="mt-12 flex flex-col items-center gap-6 w-full">
+            <div id="status-decoding">
+                <span class="text-4xl text-yellow-400 font-festive font-bold italic tracking-widest drop-shadow-[0_0_10px_rgba(255,207,51,0.5)] animate-pulse">Đang khai lộc...</span>
+            </div>
+            <button id="btn-claim-lộc" class="hidden btn-gold-gradient text-red-900 px-16 py-5 rounded-full font-black text-sm tracking-widest uppercase border-2 border-white transition-all hover:scale-110 active:scale-95 animate-bounce">
+                NHẬN LỘC NGAY!
+            </button>
+        </div>
+    </div>
+
+    <!-- Lantern Decor -->
+    <div class="fixed top-0 left-0 p-6 pointer-events-none opacity-20 sm:opacity-40 text-5xl">🏮</div>
+    <div class="fixed top-0 right-0 p-6 pointer-events-none opacity-20 sm:opacity-40 text-5xl">🏮</div>
+
+    <!-- APP LOGIC -->
+    <script>
+        $(function() {
+            const STORAGE_KEY = 'lixi_pure_v4';
+            let config = { total: 1000000, count: 10, min: 20000, max: 200000, amounts: [] };
+            let openStates = [];
+            let shuffledAmounts = [];
+            let history = JSON.parse(localStorage.getItem(STORAGE_KEY + '_history')) || [];
+            let currentOpeningIdx = null;
+
+            const formatVN = (n) => new Intl.NumberFormat('vi-VN').format(n);
+            const parseVN = (s) => parseInt(s.replace(/[^0-9]/g, '')) || 0;
+
+            const distributeAmounts = (total, count, min, max) => {
+                const UNIT = 10000;
+                if (total % UNIT !== 0 || min % UNIT !== 0 || max % UNIT !== 0) return null;
+                if (min * count > total || max * count < total) return null;
+
+                let amounts = new Array(count).fill(min);
+                let remaining = total - (min * count);
+
+                for (let i = 0; i < 5000 && remaining > 0; i++) {
+                    let idx = Math.floor(Math.random() * count);
+                    let canAdd = max - amounts[idx];
+                    if (canAdd > 0) {
+                        let step = Math.min(remaining, canAdd, UNIT * (Math.floor(Math.random() * 3) + 1));
+                        amounts[idx] += step;
+                        remaining -= step;
+                    }
                 }
-                return { items, totalTime: currentDelay + 1.2 };
-            }, [focusedIndex, shuffledAmounts, openStates, config.count, maxDigitCount]);
-
-            const handleCardClick = (idx) => {
-                if (openStates[idx]) return;
-                setFocusedIndex(idx); setIsRevealing(false);
-                setTimeout(() => setIsRevealing(true), 600);
-                setTimeout(() => {
-                    setOpenStates(prev => { const n = [...prev]; n[idx] = true; return n; });
-                    setTriggerConfetti(p => p + 1);
-                }, revealDetails.totalTime * 1000);
+                for (let i = 0; i < count && remaining > 0; i++) {
+                    let canAdd = max - amounts[i];
+                    if (canAdd > 0) {
+                        let add = Math.min(remaining, canAdd);
+                        amounts[i] += add;
+                        remaining -= add;
+                    }
+                }
+                return remaining === 0 ? amounts : null;
             };
 
-            const gridClass = useMemo(() => {
+            const triggerConfetti = () => {
+                const colors = ['#f44336', '#ffcf33', '#ffa000', '#ffffff', '#e91e63'];
+                for (let i = 0; i < 50; i++) {
+                    const $p = $('<div class="confetti-particle"></div>').css({
+                        left: Math.random() * 100 + '%',
+                        top: '-20px', width: '8px', height: '8px',
+                        backgroundColor: colors[Math.floor(Math.random() * colors.length)],
+                        borderRadius: Math.random() > 0.5 ? '50%' : '0',
+                        animationDuration: (1.5 + Math.random() * 2) + 's',
+                        animationDelay: (Math.random() * 0.5) + 's'
+                    });
+                    $('body').append($p);
+                    setTimeout(() => $p.remove(), 4000);
+                }
+            };
+
+            const updateHistoryUI = () => {
+                if (history.length > 0) {
+                    $('#history-box').removeClass('hidden');
+                    const $list = $('#history-list').empty();
+                    [...history].reverse().forEach((item) => {
+                        $list.append(`
+                            <div class="flex justify-between items-center bg-white/90 p-3 rounded-xl border border-red-50 shadow-sm mb-1">
+                                <span class="text-red-700 font-bold text-xs uppercase">${item.name || 'Người may mắn'}</span>
+                                <span class="text-amber-600 font-black text-sm">+${formatVN(item.amount)}đ</span>
+                            </div>
+                        `);
+                    });
+                } else {
+                    $('#history-box').addClass('hidden');
+                }
+            };
+
+            const handleUpdatePreview = () => {
+                const t = parseVN($('#total-input').val());
+                const c = parseInt($('#count-input').val()) || 0;
+                const mn = parseVN($('#min-input').val());
+                const mx = parseVN($('#max-input').val());
+                const res = distributeAmounts(t, c, mn, mx);
+                if (res) {
+                    $('#error-msg').addClass('hidden');
+                    $('#preview-box').removeClass('hidden');
+                    $('#preview-header').text(`Phân bổ dự kiến (Tổng: ${formatVN(t)}đ)`);
+                    const $list = $('#preview-list').empty();
+                    [...res].sort((a,b) => b-a).forEach(amt => {
+                        $list.append(`<div class="bg-white px-2 py-2 rounded-xl text-[0.7rem] text-center border border-yellow-100 text-red-600 font-black shadow-sm">${formatVN(amt)}đ</div>`);
+                    });
+                    config = { total: t, count: c, min: mn, max: mx, amounts: res };
+                    return true;
+                } else {
+                    $('#preview-box').addClass('hidden');
+                    $('#error-msg').removeClass('hidden');
+                    return false;
+                }
+            };
+
+            $('.money-input').on('input', function() {
+                $(this).val(formatVN(parseVN($(this).val())));
+                handleUpdatePreview();
+            });
+            $('#count-input').on('input', handleUpdatePreview);
+
+            $('#btn-suggest').click(() => {
+                const t = parseVN($('#total-input').val()) || 1000000;
+                const c = parseInt($('#count-input').val()) || 10;
+                const avg = t / c;
+                $('#min-input').val(formatVN(Math.max(10000, Math.floor(avg * 0.4 / 10000) * 10000)));
+                $('#max-input').val(formatVN(Math.floor(avg * 2.0 / 10000) * 10000));
+                handleUpdatePreview();
+            });
+
+            $('#btn-save').click(() => {
+                if (handleUpdatePreview()) {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
+                    alert("Đã lưu cấu hình!");
+                }
+            });
+
+            $('#btn-start').click(() => {
+                if (handleUpdatePreview()) {
+                    $('#main-header, #setup-screen').fadeOut(300, () => {
+                        $('#game-screen').fadeIn(300);
+                        renderGrid();
+                    });
+                }
+            });
+
+            $('#btn-config').click(() => {
+                $('#game-screen').fadeOut(300, () => $('#main-header, #setup-screen').fadeIn(300));
+            });
+
+            $('#btn-shuffle').click(() => {
+                $('.lixi-wrapper').addClass('opacity-0 scale-90');
+                setTimeout(renderGrid, 300);
+            });
+
+            const renderGrid = () => {
+                const $grid = $('#lixi-grid').empty();
                 const n = config.count;
-                if (n === 1) return 'grid-cols-1 max-w-xs';
-                if (n <= 3) return 'grid-cols-2 sm:grid-cols-3 max-w-xl';
-                if (n <= 6) return 'grid-cols-2 sm:grid-cols-3 max-w-2xl';
-                if (n <= 12) return 'grid-cols-3 sm:grid-cols-4 md:grid-cols-6 max-w-4xl';
-                return 'grid-cols-4 sm:grid-cols-6 md:grid-cols-8 max-w-6xl';
-            }, [config.count]);
-
-            return (
-                <div className="flex-1 flex flex-col relative h-full animate-in fade-in duration-500">
-                    <div key={triggerConfetti}>{triggerConfetti > 0 && <Confetti />}</div>
-                    <div className="flex-1 overflow-y-auto px-4 py-10 flex items-center justify-center">
-                        <div className={`grid gap-4 w-full mx-auto ${gridClass}`}>
-                            {shuffledAmounts.map((amt, idx) => (
-                                <LixiCard key={idx} amount={amt} isOpen={openStates[idx]} onOpen={() => handleCardClick(idx)} />
-                            ))}
-                        </div>
-                    </div>
-
-                    {focusedIndex !== null && (
-                        <div onClick={() => setFocusedIndex(null)} className="fixed inset-0 z-[100] flex items-center justify-center p-4 overlay-blur animate-in fade-in duration-300 cursor-pointer">
-                            <div onClick={e => e.stopPropagation()} className="relative w-full max-w-[400px] aspect-[3/4.8] entrance-pop shadow-[0_0_100px_rgba(211,47,47,0.4)] rounded-[3.5rem] overflow-hidden border-[10px] border-yellow-400 bg-white">
-                                <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-white z-10">
-                                    <div className="w-full flex flex-col items-center">
-                                        <div className="flex items-center justify-center w-full h-28 gap-1 px-1">
-                                            {revealDetails.items.map((item, i) => (
-                                                <div key={i} className="relative flex-1 h-full flex items-center justify-center border-b-4 border-red-50">
-                                                    <span className="text-red-600 font-festive font-black text-3xl sm:text-5xl drop-shadow-sm">{item.char}</span>
-                                                    <div className="absolute inset-0 bg-gradient-to-b from-[#d32f2f] to-[#b71c1c] z-20 transition-all shadow-lg overflow-hidden"
-                                                        style={{
-                                                            clipPath: isRevealing ? 'inset(0 0 100% 0)' : 'inset(0 0 0 0)',
-                                                            transitionDuration: `${item.duration}s`,
-                                                            transitionDelay: `${item.delay}s`,
-                                                            transitionTimingFunction: 'cubic-bezier(0.1, 0.7, 0.1, 1)'
-                                                        }}>
-                                                        <div className="w-full h-full flex items-center justify-center text-yellow-400/30 text-3xl font-festive">福</div>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                            <div className="flex items-center justify-center h-full ml-1"><span className="text-red-600 font-festive font-black text-3xl sm:text-5xl">đ</span></div>
-                                        </div>
+                openStates = new Array(n).fill(false);
+                shuffledAmounts = [...config.amounts].sort(() => Math.random() - 0.5);
+                let gridClass = 'grid-cols-2 sm:grid-cols-4 md:grid-cols-5';
+                if (n === 1) gridClass = 'grid-cols-1';
+                else if (n <= 3) gridClass = 'grid-cols-2 sm:grid-cols-3';
+                $grid.attr('class', `grid gap-4 w-full mx-auto max-w-6xl animate-in fade-in duration-500 ${gridClass}`);
+                shuffledAmounts.forEach((amt, idx) => {
+                    const $card = $(`
+                        <div class="lixi-wrapper relative w-full aspect-[3/4.5] max-w-[160px] cursor-pointer group transition-all duration-300 hover:scale-105 active:scale-95">
+                            <div class="w-full h-full relative rounded-3xl overflow-hidden shadow-lg border-2 border-[#ffcf33] bg-[#d32f2f] flex flex-col items-center justify-center shimmer">
+                                <div class="front-ui flex flex-col items-center justify-center pointer-events-none">
+                                    <div class="w-14 h-14 bg-gradient-to-br from-pink-500 to-red-600 rounded-2xl flex items-center justify-center mb-3 shadow-inner border border-red-400">
+                                        <span class="text-yellow-400 text-2xl font-bold">福</span>
                                     </div>
-                                    <div className="mt-14 space-y-3">
-                                        <div className="text-amber-600 font-black text-[0.6rem] tracking-[0.5em] uppercase opacity-60">Lộc Xuân Đại Cát</div>
-                                        <div className="text-red-500 font-festive font-black text-2xl sm:text-4xl uppercase tracking-tighter drop-shadow-md">VẠN SỰ NHƯ Ý</div>
-                                    </div>
-                                    <div className="absolute bottom-14 left-0 right-0 text-red-50 text-[16rem] opacity-10 pointer-events-none font-festive flex justify-center">福</div>
-                                    {openStates[focusedIndex] && (
-                                        <div className="absolute bottom-10 left-0 right-0 animate-bounce text-red-400 text-[0.7rem] font-black uppercase tracking-[0.4em]">Chạm để đóng</div>
-                                    )}
+                                    <span class="text-white font-bold text-xs tracking-widest uppercase">Lì Xì</span>
+                                </div>
+                                <div class="back-ui hidden flex flex-col items-center justify-center p-2 text-center">
+                                     <div class="text-yellow-400 font-festive font-black text-lg sm:text-xl leading-none">${formatVN(amt)}đ</div>
+                                     <div class="text-white/60 text-[0.6rem] mt-2 font-bold uppercase tracking-widest">Đã mở</div>
                                 </div>
                             </div>
-                            <div className="absolute bottom-10 text-center pointer-events-none">
-                                {!openStates[focusedIndex] ? <div className="text-2xl animate-pulse text-yellow-400 font-festive font-bold drop-shadow-lg">ĐANG GIẢI MÃ LỘC...</div> : <div className="bg-yellow-400 text-red-900 px-10 py-4 rounded-full font-black text-sm shadow-2xl tracking-widest uppercase border-2 border-white animate-bounce">TUYỆT VỜI!</div>}
+                        </div>
+                    `);
+                    $grid.append($card);
+                    $card.click(() => handleOpen(idx, $card));
+                });
+            };
+
+            const handleOpen = (idx, $card) => {
+                if (openStates[idx]) return;
+                currentOpeningIdx = idx;
+                
+                const amount = shuffledAmounts[idx];
+                const amountStr = amount.toString();
+                // Ensure at least 5 digits for layout consistency
+                const maxValDigits = Math.max(5, amountStr.length);
+                const paddedStr = amountStr.padStart(maxValDigits, '0');
+                const chars = paddedStr.split('');
+                
+                const $digitContainer = $('#digit-container').empty();
+                const $overlay = $('#reveal-overlay').removeClass('hidden').css('display', 'flex').hide().fadeIn(400);
+                const $decoding = $('#status-decoding').show();
+                const $claimBtn = $('#btn-claim-lộc').hide();
+                const $hint = $('#reveal-tap-hint').show();
+                const $inputContainer = $('#receiver-input-container').hide();
+                $('#receiver-name').val('');
+
+                const digitElements = chars.map((char, i) => {
+                    const reverseIdx = maxValDigits - 1 - i;
+                    const duration = 0.8 + (reverseIdx * 0.4);
+                    const $box = $(`
+                        <div class="digit-box relative flex-1 h-full flex items-center justify-center border-b-4 border-red-50 bg-white overflow-hidden">
+                            <span class="text-red-600 font-festive font-[900] text-3xl sm:text-5xl drop-shadow-sm">${char}</span>
+                            <div class="digit-reveal-cover absolute inset-0 bg-[#d32f2f] z-20 transition-all flex items-center justify-center border border-red-800" 
+                                 style="transition-duration: ${duration}s">
+                                <span class="text-yellow-400/30 text-2xl font-festive select-none">福</span>
                             </div>
                         </div>
-                    )}
+                    `);
+                    $digitContainer.append($box);
+                    return { $el: $box, duration };
+                });
 
-                    <div className="absolute bottom-8 right-8 flex flex-col gap-4 z-50">
-                        <button onClick={onBack} className="w-16 h-16 bg-white text-red-600 border-4 border-yellow-400 rounded-full shadow-2xl flex items-center justify-center text-2xl hover:scale-110 active:scale-90 transition-all"><i className="fa-solid fa-gear"></i></button>
-                        <button onClick={() => { setOpenStates(new Array(config.count).fill(false)); setFocusedIndex(null); setTimeout(() => setShuffledAmounts([...config.amounts].sort(() => Math.random() - 0.5)), 400); }} className="w-16 h-16 bg-white text-red-600 border-4 border-yellow-400 rounded-full shadow-2xl flex items-center justify-center text-2xl hover:scale-110 active:scale-90 transition-all"><i className="fa-solid fa-rotate"></i></button>
-                    </div>
-                </div>
-            );
-        };
+                $digitContainer.append('<div class="flex items-center justify-center h-full ml-1"><span class="text-red-600 font-festive font-[900] text-3xl sm:text-5xl">đ</span></div>');
 
-        const App = () => {
-            const [view, setView] = useState('setup');
-            const [config, setConfig] = useState(null);
-            return (
-                <div className="min-h-screen flex flex-col w-full overflow-hidden">
-                    <header className="py-8 flex flex-col items-center flex-shrink-0">
-                        <h1 className="text-5xl font-festive font-black text-red-600 drop-shadow-sm tracking-tighter">LÌ XÌ <span className="text-amber-500">TẾT</span></h1>
-                        <div className="h-1.5 w-32 bg-gradient-to-r from-transparent via-yellow-400 to-transparent mt-3"></div>
-                    </header>
-                    <main className="flex-1 flex flex-col px-4 pb-12 w-full max-w-7xl mx-auto">
-                        {view === 'setup' ? <div className="flex-1 flex items-center justify-center"><SetupScreen onStart={c => { setConfig(c); setView('playing'); }} /></div> : config && <GameScreen config={config} onBack={() => setView('setup')} />}
-                    </main>
-                    <div className="fixed top-4 left-4 p-4 opacity-40 sm:opacity-60 pointer-events-none text-4xl">🏮</div>
-                    <div className="fixed top-4 right-4 p-4 opacity-40 sm:opacity-60 pointer-events-none text-4xl">🏮</div>
-                </div>
-            );
-        };
+                // Sequence Reveal logic
+                let maxFinalTime = 0;
+                setTimeout(() => {
+                    digitElements.forEach((d, i) => {
+                        const reverseIdx = maxValDigits - 1 - i;
+                        const delay = reverseIdx * 0.45;
+                        const totalTime = delay + d.duration;
+                        if (totalTime > maxFinalTime) maxFinalTime = totalTime;
 
-        createRoot(document.getElementById('root')).render(<App />);
+                        d.$el.find('.digit-reveal-cover').css('transition-delay', delay + 's');
+                        // Use microtask or minimal timeout to ensure transitions are ready
+                        setTimeout(() => d.$el.addClass('revealed'), 100);
+                    });
+
+                    // Final state transition
+                    setTimeout(() => {
+                        $decoding.fadeOut(300, () => {
+                            $claimBtn.fadeIn(400);
+                            $inputContainer.fadeIn(400);
+                            $hint.fadeOut(400);
+                            triggerConfetti();
+                        });
+                    }, (maxFinalTime * 1000) + 400);
+                }, 600);
+            };
+
+            $('#btn-claim-lộc').click(function(e) {
+                e.stopPropagation();
+                const idx = currentOpeningIdx;
+                const name = $('#receiver-name').val().trim();
+                const amount = shuffledAmounts[idx];
+                history.push({ name, amount, timestamp: Date.now() });
+                localStorage.setItem(STORAGE_KEY + '_history', JSON.stringify(history));
+                openStates[idx] = true;
+                const $card = $('.lixi-wrapper').eq(idx);
+                $card.addClass('lixi-opened');
+                $card.find('.front-ui').hide();
+                $card.find('.back-ui').removeClass('hidden');
+                updateHistoryUI();
+                $('#reveal-overlay').fadeOut(400, () => $('#reveal-overlay').addClass('hidden'));
+            });
+
+            $('#reveal-card').click(e => e.stopPropagation());
+
+            // --- Init ---
+            const savedData = localStorage.getItem(STORAGE_KEY);
+            if (savedData) {
+                const s = JSON.parse(savedData);
+                $('#total-input').val(formatVN(s.total));
+                $('#count-input').val(s.count);
+                $('#min-input').val(formatVN(s.min));
+                $('#max-input').val(formatVN(s.max));
+            }
+            handleUpdatePreview();
+            updateHistoryUI();
+        });
     </script>
 </body>
 </html>
