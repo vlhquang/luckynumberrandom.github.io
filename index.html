@@ -2,8 +2,8 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Lì xì Tết 2026 - Pro Version</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Lì xì Tết 2026 - Final Mobile Fix</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -21,6 +21,11 @@
         /* TOAST NOTIFICATION */
         #toast-msg { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: #fff; padding: 10px 20px; border-radius: 20px; font-size: 12px; font-weight: bold; z-index: 10000; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
         #toast-msg.show { opacity: 1; }
+
+        /* CUSTOM SCROLLBAR CHO MODAL */
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #ffd700; border-radius: 4px; }
 
         /* CARD STYLES */
         .lixi-wrapper { transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); will-change: transform; touch-action: manipulation; }
@@ -42,42 +47,26 @@
         .wiggling .speech-bubble { transform: translateX(-50%) scale(1); }
         @keyframes wiggle { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(-5deg); } 75% { transform: rotate(5deg); } }
 
-        /* SCRATCH CANVAS (LỚP CÀO) */
+        /* SCRATCH CANVAS */
         #scratch-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 50; cursor: pointer; touch-action: none; border-radius: 1rem; }
         
-        /* VÙNG CÀO: SIZE CỐ ĐỊNH, CANH GIỮA */
         #scratch-area { 
-            position: relative; 
-            width: 100%; 
-            height: 180px; 
-            display: flex; 
-            align-items: center;
-            justify-content: center;
-            overflow: hidden; 
-            border-radius: 1rem; 
-            background: #fffdf5; 
-            margin-top: 10px;
-            margin-bottom: 10px;
+            position: relative; width: 100%; height: 120px; 
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden; border-radius: 1rem; background: #fffdf5; 
+            margin-top: 15px; margin-bottom: 15px;
         }
 
-        #digit-container {
-            position: relative;
-            z-index: 10;
-            opacity: 0; /* Ẩn đi chờ canvas vẽ xong mới hiện */
-            transition: opacity 0.2s;
-        }
+        #digit-container { position: relative; z-index: 10; opacity: 0; transition: opacity 0.2s; }
+        #digit-container .digit-box span { font-size: 2.5rem; }
+        @media (min-width: 640px) { #digit-container .digit-box span { font-size: 3.5rem; } }
 
         /* AUTO REVEAL ANIMATION */
         .digit-reveal-cover { clip-path: inset(0 0 0 0); transition: clip-path 0.5s cubic-bezier(0.4, 0, 0.2, 1); background-color: #fffdf5; position: absolute; inset: 0; z-index: 30; }
         .digit-box.revealed .digit-reveal-cover { clip-path: inset(0 0 100% 0); }
 
         /* JACKPOT STYLES */
-        .jackpot-revealed #reveal-card-content { 
-            background: linear-gradient(135deg, #fff 0%, #ffd700 100%) !important; 
-            border-color: #fff !important; 
-            box-shadow: 0 0 80px rgba(255, 215, 0, 0.9) !important;
-            transition: all 0.8s ease; 
-        }
+        .jackpot-revealed #reveal-card-content { background: linear-gradient(135deg, #fff 0%, #ffd700 100%) !important; border-color: #fff !important; box-shadow: 0 0 80px rgba(255, 215, 0, 0.9) !important; transition: all 0.8s ease; }
         .jackpot-badge { animation: pulse-gold 1s infinite; }
         @keyframes pulse-gold { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
 
@@ -92,24 +81,24 @@
     <div id="toast-msg">Đã lưu cấu hình!</div>
     <canvas id="fireworks-canvas"></canvas>
 
-    <div class="container mx-auto px-2 py-4 flex flex-col items-center max-w-6xl min-h-screen relative z-10">
-        <header id="main-header" class="text-center mb-4 transition-all duration-500">
-            <h1 class="text-5xl font-festive font-bold text-yellow-400 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+    <div class="container mx-auto px-3 py-4 flex flex-col items-center max-w-6xl min-h-screen relative z-10">
+        <header id="main-header" class="text-center mb-2 transition-all duration-500 pt-safe">
+            <h1 class="text-4xl sm:text-5xl font-festive font-bold text-yellow-400 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
                 Lì Xì <span class="text-white">Tết</span>
             </h1>
-            <p class="text-yellow-200/80 text-[0.65rem] font-bold tracking-[0.3em] uppercase mt-1">Vạn sự như ý • Tỷ sự như mơ</p>
+            <p class="text-yellow-200/80 text-[0.6rem] sm:text-[0.65rem] font-bold tracking-[0.3em] uppercase mt-1">Vạn sự như ý • Tỷ sự như mơ</p>
         </header>
 
-        <main class="w-full flex justify-center items-center flex-1 pb-16">
-            <div id="setup-screen" class="bg-[#fffdf5] rounded-[2rem] p-6 shadow-2xl w-full max-w-md border-4 border-yellow-400">
+        <main class="w-full flex justify-center items-center flex-1 pb-24 sm:pb-16">
+            <div id="setup-screen" class="bg-[#fffdf5] rounded-[2rem] p-5 sm:p-6 shadow-2xl w-full max-w-md border-4 border-yellow-400 mb-8 max-h-[85vh] overflow-y-auto custom-scrollbar">
                 <div class="space-y-4">
                     <div class="grid grid-cols-2 gap-3">
-                        <div><label class="text-[10px] font-bold text-gray-500 uppercase ml-1">Tổng tiền</label><input type="text" id="total-input" value="500.000" class="premium-input w-full p-3 rounded-xl font-bold text-center outline-none" inputmode="numeric"/></div>
-                        <div><label class="text-[10px] font-bold text-gray-500 uppercase ml-1">Số bao</label><input type="number" id="count-input" value="8" min="2" max="50" class="premium-input w-full p-3 rounded-xl font-bold text-center outline-none" inputmode="numeric"/></div>
+                        <div><label class="text-[10px] font-bold text-gray-500 uppercase ml-1">Tổng tiền</label><input type="text" id="total-input" value="500.000" class="premium-input w-full p-3 rounded-xl font-bold text-center outline-none text-sm" inputmode="numeric"/></div>
+                        <div><label class="text-[10px] font-bold text-gray-500 uppercase ml-1">Số bao</label><input type="number" id="count-input" value="8" min="2" max="50" class="premium-input w-full p-3 rounded-xl font-bold text-center outline-none text-sm" inputmode="numeric"/></div>
                     </div>
                     <div class="grid grid-cols-2 gap-3">
-                        <div><label class="text-[10px] font-bold text-gray-500 uppercase ml-1">Min</label><input type="text" id="min-input" value="10.000" class="premium-input w-full p-3 rounded-xl font-bold text-center outline-none" inputmode="numeric"/></div>
-                        <div><label class="text-[10px] font-bold text-gray-500 uppercase ml-1">Max</label><input type="text" id="max-input" value="100.000" class="premium-input w-full p-3 rounded-xl font-bold text-center outline-none" inputmode="numeric"/></div>
+                        <div><label class="text-[10px] font-bold text-gray-500 uppercase ml-1">Min</label><input type="text" id="min-input" value="10.000" class="premium-input w-full p-3 rounded-xl font-bold text-center outline-none text-sm" inputmode="numeric"/></div>
+                        <div><label class="text-[10px] font-bold text-gray-500 uppercase ml-1">Max</label><input type="text" id="max-input" value="100.000" class="premium-input w-full p-3 rounded-xl font-bold text-center outline-none text-sm" inputmode="numeric"/></div>
                     </div>
                     
                     <div class="flex gap-2 pt-1">
@@ -129,7 +118,7 @@
                 </div>
 
                 <div class="mt-4 flex gap-3">
-                     <button id="btn-save-config" class="flex-1 btn-action bg-gray-600 hover:bg-gray-700 text-white py-3 rounded-xl font-bold text-sm uppercase shadow-lg"><i class="fa-solid fa-floppy-disk mr-2"></i> Lưu Cấu Hình</button>
+                     <button id="btn-save-config" class="flex-1 btn-action bg-gray-600 hover:bg-gray-700 text-white py-3 rounded-xl font-bold text-xs sm:text-sm uppercase shadow-lg"><i class="fa-solid fa-floppy-disk mr-2"></i> Lưu Cấu Hình</button>
                 </div>
 
                 <div class="mt-3 border-t border-red-100 pt-4">
@@ -137,9 +126,10 @@
                 </div>
                 
                 <div id="error-msg" class="hidden mt-4 p-3 bg-red-100 text-red-600 rounded-xl text-center text-xs font-bold"></div>
+                
                 <div id="review-section" class="hidden mt-4 bg-white rounded-xl border-2 border-red-200 overflow-hidden shadow-inner">
                     <div class="bg-red-50 p-2 border-b border-red-100 flex justify-between items-center"><span class="text-[10px] font-bold text-red-700 uppercase">Chi tiết</span><span class="text-[9px] font-bold bg-green-100 text-green-800 px-2 py-0.5 rounded-full">OK</span></div>
-                    <div id="preview-list" class="p-3 grid grid-cols-3 gap-2 max-h-32 overflow-y-auto"></div>
+                    <div id="preview-list" class="p-3 grid grid-cols-3 gap-2"></div>
                     <div class="p-2 bg-gray-50 flex gap-2 border-t border-gray-200">
                         <button id="btn-reroll-setup" class="flex-1 bg-white border border-gray-300 text-gray-600 py-2 rounded-lg font-bold text-xs">Đổi số</button>
                         <button id="btn-confirm-start" class="flex-[1.5] bg-red-600 text-white py-2 rounded-lg font-bold text-xs uppercase shadow-md animate-pulse">Bắt đầu</button>
@@ -147,50 +137,43 @@
                 </div>
             </div>
 
-            <div id="game-screen" class="hidden w-full flex-col items-center justify-center min-h-[70vh]">
-                <div class="w-full max-w-5xl px-2">
-                    <div id="lixi-grid" class="grid grid-cols-2 min-[450px]:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 justify-items-center"></div>
+            <div id="game-screen" class="hidden w-full flex-col items-center justify-center min-h-[60vh]">
+                <div class="w-full max-w-5xl px-1">
+                    <div id="lixi-grid" class="grid grid-cols-2 min-[500px]:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 justify-items-center pb-safe"></div>
                 </div>
                 
-                <div class="fixed bottom-4 right-4 flex flex-col gap-3 z-50">
-                    <button id="btn-config" class="w-12 h-12 bg-white text-red-600 rounded-full shadow-2xl flex items-center justify-center text-lg border-2 border-yellow-400 active:scale-90"><i class="fa-solid fa-gear"></i></button>
-                    <button id="btn-reroll-game" class="w-12 h-12 bg-blue-500 text-white rounded-full shadow-2xl flex items-center justify-center text-lg border-2 border-white active:scale-90"><i class="fa-solid fa-dice"></i></button>
-                    <button id="btn-shuffle" class="w-12 h-12 bg-yellow-400 text-red-700 rounded-full shadow-2xl flex items-center justify-center text-lg border-2 border-white active:scale-90"><i class="fa-solid fa-rotate"></i></button>
+                <div class="fixed bottom-6 right-4 flex flex-col gap-3 z-50 pb-safe">
+                    <button id="btn-config" class="w-11 h-11 bg-white text-red-600 rounded-full shadow-2xl flex items-center justify-center text-lg border-2 border-yellow-400 active:scale-90"><i class="fa-solid fa-gear"></i></button>
+                    <button id="btn-reroll-game" class="w-11 h-11 bg-blue-500 text-white rounded-full shadow-2xl flex items-center justify-center text-lg border-2 border-white active:scale-90"><i class="fa-solid fa-dice"></i></button>
+                    <button id="btn-shuffle" class="w-11 h-11 bg-yellow-400 text-red-700 rounded-full shadow-2xl flex items-center justify-center text-lg border-2 border-white active:scale-90"><i class="fa-solid fa-rotate"></i></button>
                 </div>
             </div>
         </main>
     </div>
 
     <div id="reveal-overlay" class="hidden fixed inset-0 z-[100] flex flex-col items-center justify-center p-4 overlay-blur cursor-pointer">
-        <div id="reveal-card-content" class="relative w-[95%] max-w-[360px] entrance-pop bg-[#fffdf5] rounded-[2rem] border-[6px] border-yellow-400 shadow-[0_0_60px_rgba(255,215,0,0.5)] overflow-hidden flex flex-col items-center text-center transition-all duration-700">
-            
-            <div id="jackpot-decor" class="hidden absolute inset-0 pointer-events-none">
-                <div class="absolute inset-0 bg-gradient-to-b from-yellow-300/30 to-transparent"></div>
-            </div>
-
-            <div class="w-full pt-6 px-4 pb-2 z-10">
-                <div id="jackpot-badge" class="hidden mb-2 opacity-0 transition-opacity duration-500">
+        <div id="reveal-card-content" class="relative w-[90%] max-w-[340px] entrance-pop bg-[#fffdf5] rounded-[2rem] border-[6px] border-yellow-400 shadow-[0_0_60px_rgba(255,215,0,0.5)] overflow-hidden flex flex-col items-center text-center transition-all duration-700">
+            <div id="jackpot-decor" class="hidden absolute inset-0 pointer-events-none"><div class="absolute inset-0 bg-gradient-to-b from-yellow-300/30 to-transparent"></div></div>
+            <div class="w-full pt-5 px-4 pb-1 z-10">
+                <div id="jackpot-badge" class="hidden mb-1 opacity-0 transition-opacity duration-500">
                     <span class="bg-red-600 text-yellow-300 border border-yellow-300 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg">★ Độc Đắc ★</span>
                 </div>
                 <div id="label-lixi" class="text-red-400 font-bold text-xs tracking-[0.3em] uppercase opacity-80 transition-colors duration-500">Lộc Xuân</div>
             </div>
-
             <div id="scratch-area" class="shadow-inner border border-yellow-100 relative bg-white cursor-crosshair">
                 <div id="digit-container" class="flex items-center justify-center gap-px font-mono select-none pointer-events-none opacity-0"></div>
                 <canvas id="scratch-canvas" class="hidden"></canvas>
             </div>
-            
-            <div class="w-full pb-6 px-4 z-20 flex flex-col items-center justify-center min-h-[100px]">
-                <div class="pointer-events-none select-none mb-3">
-                    <h3 class="text-xl font-festive text-yellow-600 font-black mb-1">Vạn Sự</h3>
-                    <h2 class="text-3xl font-festive text-red-600 font-black">Như Ý</h2>
+            <div class="w-full pb-5 px-4 z-20 flex flex-col items-center justify-center min-h-[90px]">
+                <div class="pointer-events-none select-none mb-2">
+                    <h3 class="text-lg font-festive text-yellow-600 font-black mb-0">Vạn Sự</h3>
+                    <h2 class="text-2xl font-festive text-red-600 font-black">Như Ý</h2>
                 </div>
-
-                <div id="status-decoding" class="h-12 flex items-center justify-center">
-                    <span id="txt-guide" class="text-gray-400 font-bold text-xs animate-pulse">👇 Cào nhẹ lớp bạc ở trên 👇</span>
+                <div id="status-decoding" class="h-10 flex items-center justify-center">
+                    <span id="txt-guide" class="text-gray-400 font-bold text-[10px] animate-pulse">👇 Cào nhẹ lớp bạc ở trên 👇</span>
                 </div>
-                <button id="btn-claim-lộc" class="hidden w-full bg-gradient-to-r from-yellow-400 to-orange-500 h-12 rounded-xl text-red-900 font-black text-lg uppercase tracking-wider shadow-lg animate-bounce">NHẬN LỘC</button>
-                <div id="tap-hint" class="hidden text-[10px] text-gray-400 mt-2 uppercase animate-pulse">(Chạm bất kỳ đâu để đóng)</div>
+                <button id="btn-claim-lộc" class="hidden w-full bg-gradient-to-r from-yellow-400 to-orange-500 h-10 rounded-xl text-red-900 font-black text-base uppercase tracking-wider shadow-lg animate-bounce">NHẬN LỘC</button>
+                <div id="tap-hint" class="hidden text-[9px] text-gray-400 mt-2 uppercase animate-pulse">(Chạm bất kỳ đâu để đóng)</div>
             </div>
         </div>
     </div>
@@ -207,7 +190,6 @@
             let idleInterval = null;
             let isScratchingComplete = false;
 
-            // --- LOCAL STORAGE LOGIC ---
             const loadConfig = () => {
                 const saved = localStorage.getItem('lixiConfig2026');
                 if (saved) {
@@ -222,7 +204,7 @@
                     } catch(e) {}
                 }
             };
-            loadConfig(); // Load ngay khi mở trang
+            loadConfig();
 
             $('#btn-save-config').click(() => {
                 const data = {
@@ -233,14 +215,11 @@
                     scratchMode: $('#toggle-scratch').is(':checked')
                 };
                 localStorage.setItem('lixiConfig2026', JSON.stringify(data));
-                
-                // Show Toast
                 const $toast = $('#toast-msg');
                 $toast.addClass('show');
                 setTimeout(() => $toast.removeClass('show'), 2000);
             });
 
-            // --- CANVAS FIREWORKS ---
             const canvasFireworks = document.getElementById('fireworks-canvas');
             const ctxFireworks = canvasFireworks.getContext('2d');
             let particles = [];
@@ -257,7 +236,6 @@
             animateFireworks();
             function launchFireworks(intensity=1) { let dur = intensity>1?4000:2000; let inter = setInterval(()=>createParticle(Math.random()*canvasFireworks.width, Math.random()*canvasFireworks.height*0.5, 20),300); setTimeout(()=>clearInterval(inter), dur); }
 
-            // --- LOGIC ---
             const formatVN = (n) => new Intl.NumberFormat('vi-VN').format(n);
             const parseVN = (s) => parseInt(s.replace(/[^0-9]/g, '')) || 0;
             const distributeUnique = (total, count, min, max) => {
@@ -280,10 +258,8 @@
                 return {success:false, msg:"Không chia được"};
             };
 
-            // --- UI HANDLERS ---
             $('#toggle-scratch').change(function() { config.scratchMode = this.checked; });
             config.scratchMode = $('#toggle-scratch').is(':checked');
-
             $('#btn-suggest-minmax').click(() => { const t=parseVN($('#total-input').val()), c=parseInt($('#count-input').val()); if(t>0&&c>1){ let avg=t/c, mn=Math.max(10000,Math.floor(avg*0.4/10000)*10000), mx=Math.ceil(avg*1.8/10000)*10000; if(mx<mn+c*10000) mx=mn+c*10000+20000; $('#min-input').val(formatVN(mn)); $('#max-input').val(formatVN(mx)); } });
             $('#btn-suggest-total').click(() => { const c=parseInt($('#count-input').val()), mn=parseVN($('#min-input').val()), mx=parseVN($('#max-input').val()); if(c>1&&mn<mx){ let s=new Set([mn,mx]); while(s.size<c) s.add(Math.floor(Math.random()*((mx-mn)/10000+1))*10000+mn); $('#total-input').val(formatVN(Array.from(s).reduce((a,b)=>a+b,0))); } });
             $('.premium-input').on('input', function() { if(this.id!=='count-input') $(this).val(formatVN(parseVN($(this).val()))); });
@@ -309,9 +285,7 @@
 
             const startDealAnimation = () => {
                 stopIdleAnimation(); $('#lixi-grid').empty(); openStates=new Array(config.count).fill(false); shuffledAmounts=[...config.amounts].sort(()=>Math.random()-0.5);
-                // Grid render
-                shuffledAmounts.forEach((a,i)=>$('#lixi-grid').append(`<div id="slot-${i}" class="w-full aspect-[2/3] max-w-[140px] opacity-0 flex items-center justify-center"></div>`)); 
-                
+                shuffledAmounts.forEach((a,i)=>$('#lixi-grid').append(`<div id="slot-${i}" class="w-full aspect-[2/3] max-w-[130px] opacity-0 flex items-center justify-center"></div>`)); 
                 const cx=window.innerWidth/2, cy=window.innerHeight/2;
                 shuffledAmounts.forEach((amt, i) => {
                     const $flyer = $(`<div class="dealing-card"><span>福</span></div>`).appendTo('#animation-layer');
@@ -334,26 +308,21 @@
                 const canvas = document.getElementById('scratch-canvas');
                 const area = document.getElementById('scratch-area');
                 const ctx = canvas.getContext('2d');
-                
                 const w = area.offsetWidth || 300; 
-                const h = area.offsetHeight || 180;
+                const h = area.offsetHeight || 120;
                 canvas.width = w; canvas.height = h;
 
                 ctx.globalCompositeOperation = 'source-over';
                 const grd = ctx.createLinearGradient(0, 0, w, h); grd.addColorStop(0, '#e0e0e0'); grd.addColorStop(0.5, '#ffffff'); grd.addColorStop(1, '#a0a0a0');
                 ctx.fillStyle = grd; ctx.fillRect(0, 0, w, h);
-                ctx.fillStyle = '#999'; ctx.font = 'bold 16px Montserrat'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('👋 CÀO HẾT ĐI 👋', w/2, h/2);
+                ctx.fillStyle = '#999'; ctx.font = 'bold 16px Montserrat'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('👋 CÀO NHẸ 👋', w/2, h/2);
 
-                // --- REALISTIC BRUSH LOGIC (Jitter Brush) ---
                 const scratch = (x, y) => { 
                     ctx.globalCompositeOperation = 'destination-out'; 
-                    // Vẽ chùm 15 chấm nhỏ ngẫu nhiên để tạo nét răng cưa
                     for(let i=0; i<15; i++) {
-                         const offsetX = (Math.random() - 0.5) * 15;
-                         const offsetY = (Math.random() - 0.5) * 15;
-                         const r = 2 + Math.random() * 5; // Bán kính random từ 2-7
+                         const r = 2 + Math.random() * 5; 
                          ctx.beginPath();
-                         ctx.arc(x + offsetX, y + offsetY, r, 0, Math.PI * 2);
+                         ctx.arc(x + (Math.random()-0.5)*15, y + (Math.random()-0.5)*15, r, 0, Math.PI * 2);
                          ctx.fill();
                     }
                     checkScratchCompletion(); 
@@ -361,7 +330,6 @@
 
                 let isDrawing = false;
                 const getPos = (e) => { const rect = canvas.getBoundingClientRect(); const cx = e.touches ? e.touches[0].clientX : e.clientX; const cy = e.touches ? e.touches[0].clientY : e.clientY; return { x: cx - rect.left, y: cy - rect.top }; };
-
                 ['mousedown', 'touchstart'].forEach(evt => canvas.addEventListener(evt, (e) => { isDrawing = true; const p = getPos(e); scratch(p.x, p.y); }));
                 ['mousemove', 'touchmove'].forEach(evt => canvas.addEventListener(evt, (e) => { if (isDrawing) { e.preventDefault(); const p = getPos(e); scratch(p.x, p.y); } }));
                 ['mouseup', 'touchend'].forEach(evt => canvas.addEventListener(evt, () => isDrawing = false));
@@ -372,11 +340,9 @@
                     checkThrottled = true; setTimeout(() => checkThrottled = false, 200);
                     const pixels = ctx.getImageData(0, 0, w, h).data;
                     let t = 0; for (let i = 3; i < pixels.length; i += 4) if (pixels[i] < 128) t++;
-                    // 50% là đủ
-                    if ((t / (pixels.length / 4)) * 100 > 50) finishReveal();
+                    if ((t / (pixels.length / 4)) * 100 > 30) finishReveal();
                 };
                 
-                // Hiện số tiền (Vì đã phủ lớp bạc xong)
                 $('#digit-container').css('opacity', 1);
             };
 
@@ -387,16 +353,13 @@
                      const ctx = canvas.getContext('2d');
                      ctx.clearRect(0, 0, canvas.width, canvas.height);
                 }
-                
                 $('#status-decoding').hide();
                 $('#btn-claim-lộc').fadeIn();
                 $('#tap-hint').fadeIn();
-                
                 const isJackpot = (shuffledAmounts[currentOpeningIdx] === config.max);
                 if(isJackpot) {
                     $('#reveal-overlay').addClass('jackpot-revealed'); 
                     $('#jackpot-badge').removeClass('hidden').removeClass('opacity-0');
-                    $('#jackpot-decor').fadeIn();
                     launchFireworks(2);
                     $('#label-lixi').text("CHÚC MỪNG").addClass("text-yellow-600").removeClass("text-red-400");
                 } else {
@@ -415,13 +378,10 @@
 
                 $('#reveal-overlay').removeClass('hidden jackpot-revealed').hide().fadeIn(200).css('display', 'flex');
                 $('#digit-container').empty();
-                $('#btn-claim-lộc, #tap-hint, #jackpot-decor').hide();
+                $('#btn-claim-lộc, #tap-hint').hide();
                 $('#status-decoding').show();
-                
                 $('#label-lixi').text("Lộc Xuân").removeClass("text-yellow-600").addClass("text-red-400");
                 $('#jackpot-badge').addClass('hidden').addClass('opacity-0');
-
-                // Ẩn số tiền trước khi lớp bạc được vẽ
                 $('#digit-container').css('opacity', 0);
 
                 const chars = amountStr.split('');
@@ -435,10 +395,9 @@
                 if (config.scratchMode) {
                     $('#scratch-canvas').removeClass('hidden');
                     $('#txt-guide').text('👇 Cào nhẹ lớp bạc ở trên 👇').addClass('animate-pulse');
-                    // Delay vẽ lớp bạc
                     setTimeout(initScratchCard, 300); 
                 } else {
-                    $('#digit-container').css('opacity', 1); // Hiện ngay
+                    $('#digit-container').css('opacity', 1);
                     $('#scratch-canvas').addClass('hidden');
                     $('#txt-guide').text('ĐANG MỞ...').addClass('animate-bounce');
                     $('.digit-box').each(function(i) {
