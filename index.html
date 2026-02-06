@@ -3,164 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Lì xì Tết - Vạn sự như ý</title>
+    <title>Lì xì Tết 2026 - Mobile Version</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <style>
         :root { --red-primary: #d00000; --red-dark: #8e0000; --gold: #ffd700; --bg-cream: #fffdf5; }
-        body { margin: 0; padding: 0; background-color: var(--red-dark); font-family: 'Montserrat', sans-serif; overflow-x: hidden; min-height: 100vh; background-image: radial-gradient(circle at center, #b71c1c 0%, #7f1d1d 100%); }
+        body { margin: 0; padding: 0; background-color: var(--red-dark); font-family: 'Montserrat', sans-serif; overflow-x: hidden; min-height: 100vh; background-image: radial-gradient(circle at center, #b71c1c 0%, #7f1d1d 100%); -webkit-tap-highlight-color: transparent; }
         .font-festive { font-family: 'Dancing Script', cursive; }
         #fireworks-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
         
-        .premium-input { background: #fff; border: 2px solid #fbbf24; color: #b91c1c; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); transition: all 0.3s; }
-        .btn-action { transition: all 0.2s; box-shadow: 0 4px 0 rgba(0,0,0,0.2); }
+        /* Mobile Input & Buttons */
+        .premium-input { background: #fff; border: 2px solid #fbbf24; color: #b91c1c; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); transition: all 0.3s; font-size: 1.1rem; }
+        .btn-action { transition: all 0.1s; box-shadow: 0 4px 0 rgba(0,0,0,0.2); touch-action: manipulation; }
         .btn-action:active { transform: translateY(4px); box-shadow: none; }
         
-        /* CARD STYLES */
-        .lixi-wrapper { transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); will-change: transform; }
-        .lixi-wrapper:hover { transform: translateY(-5px) scale(1.05); z-index: 10; }
+        /* Lì xì Card */
+        .lixi-wrapper { 
+            transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+            will-change: transform; 
+            touch-action: manipulation;
+        }
+        .lixi-wrapper:active { transform: scale(0.95) !important; }
         
         .shimmer { position: relative; overflow: hidden; }
         .shimmer::after { content: ""; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent); transform: rotate(45deg); animation: shimmer 3s infinite; }
         
-        /* REVEAL LOGIC */
+        /* Reveal Logic */
         .digit-reveal-cover { clip-path: inset(0 0 0 0); transition: clip-path 0.5s cubic-bezier(0.4, 0, 0.2, 1); background-color: #fffdf5; }
         .digit-box.revealed .digit-reveal-cover { clip-path: inset(0 0 100% 0); }
-        .overlay-blur { backdrop-filter: blur(15px); background: rgba(0, 0, 0, 0.85); display: none; }
+        .overlay-blur { backdrop-filter: blur(15px); background: rgba(0, 0, 0, 0.9); display: none; }
         .entrance-pop { animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both; }
         @keyframes pop { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-        /* OPENED STATE - QUAN TRỌNG */
-        .lixi-opened { pointer-events: none; transform: scale(0.95); }
+        .lixi-opened { pointer-events: none; transform: scale(0.95); opacity: 1; }
         .lixi-opened .front-ui { display: none !important; }
         .lixi-opened .back-ui { display: flex !important; opacity: 1 !important; }
 
-        .separator-box { width: 15px !important; }
-        .preview-item { font-variant-numeric: tabular-nums; }
+        .separator-box { width: 10px !important; }
         
-        /* JACKPOT STYLE */
-        .jackpot-mode #reveal-card-content {
-            background: linear-gradient(135deg, #fff 0%, #ffd700 100%);
-            border-color: #fff;
-            box-shadow: 0 0 100px rgba(255, 215, 0, 0.8), inset 0 0 30px rgba(255, 215, 0, 0.5);
+        /* Bong bóng thoại (Mobile optimized) */
+        .speech-bubble {
+            position: absolute; bottom: 105%; left: 50%; transform: translateX(-50%) scale(0);
+            background: #fff; color: #d00000; padding: 4px 8px; border-radius: 8px;
+            font-size: 10px; font-weight: bold; white-space: nowrap;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2); z-index: 20;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
         }
+        .speech-bubble::after { content: ''; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: #fff transparent transparent transparent; }
+        
+        /* Class để kích hoạt animation trên mobile */
+        .wiggling { animation: wiggle 0.5s ease-in-out; }
+        .wiggling .speech-bubble { transform: translateX(-50%) scale(1); }
+        
+        @keyframes wiggle { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(-5deg); } 75% { transform: rotate(5deg); } }
+
+        /* Jackpot */
+        .jackpot-mode #reveal-card-content { background: linear-gradient(135deg, #fff 0%, #ffd700 100%); border-color: #fff; box-shadow: 0 0 50px rgba(255, 215, 0, 0.8); }
         .jackpot-mode .digit-reveal-cover { background-color: #fffdf5; }
         .jackpot-badge { animation: pulse-gold 1s infinite; }
         @keyframes pulse-gold { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
 
-        /* DEAL CARD ANIMATION */
+        /* Dealing Card */
         .dealing-card {
-            position: fixed; top: 50%; left: 50%; width: 100px; height: 150px;
+            position: fixed; top: 50%; left: 50%; width: 80px; height: 120px;
             background: linear-gradient(135deg, #d00000 0%, #8e0000 100%);
-            border: 2px solid #ffd700; border-radius: 1rem;
+            border: 2px solid #ffd700; border-radius: 0.8rem;
             transform: translate(-50%, -50%) scale(0.5);
             transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
-            z-index: 9999; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 9999; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
             display: flex; align-items: center; justify-content: center;
         }
         .dealing-card span { font-size: 2rem; color: #ffd700; font-family: 'Dancing Script'; font-weight: bold; }
 
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-thumb { background: #fbbf24; border-radius: 4px; }
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
     </style>
 </head>
 <body>
     <canvas id="fireworks-canvas"></canvas>
 
-    <div class="container mx-auto px-4 py-8 flex flex-col items-center max-w-6xl min-h-screen relative z-10">
-        <header id="main-header" class="text-center mb-8 transition-all duration-500">
-            <h1 class="text-5xl sm:text-7xl font-festive font-bold text-yellow-400 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
-                Hái Lộc <span class="text-white">Đầu Xuân</span>
+    <div class="container mx-auto px-4 py-6 flex flex-col items-center max-w-6xl min-h-screen relative z-10">
+        <header id="main-header" class="text-center mb-6 transition-all duration-500">
+            <h1 class="text-5xl font-festive font-bold text-yellow-400 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+                Lì Xì <span class="text-white">Tết</span>
             </h1>
-            <p class="text-yellow-200/80 text-xs font-bold tracking-[0.3em] uppercase mt-2">Vạn sự như ý • Tỷ sự như mơ</p>
+            <p class="text-yellow-200/80 text-[0.65rem] font-bold tracking-[0.3em] uppercase mt-1">Vạn sự như ý • Tỷ sự như mơ</p>
         </header>
 
-        <main class="w-full flex justify-center items-center flex-1">
-            <div id="setup-screen" class="bg-[#fffdf5] rounded-3xl p-6 sm:p-8 shadow-2xl w-full max-w-lg border-4 border-yellow-400">
-                <h2 class="text-2xl font-bold text-red-700 mb-6 text-center uppercase border-b-2 border-red-100 pb-2">Cấu hình Lì Xì</h2>
-                <div class="space-y-5">
-                    <div class="grid grid-cols-2 gap-4">
-                        <div><label class="text-xs font-bold text-gray-500 uppercase ml-1">Tổng tiền</label><input type="text" id="total-input" value="1.000.000" class="premium-input w-full p-3 rounded-xl font-bold text-center text-lg outline-none" /></div>
-                        <div><label class="text-xs font-bold text-gray-500 uppercase ml-1">Số bao</label><input type="number" id="count-input" value="10" min="2" max="100" class="premium-input w-full p-3 rounded-xl font-bold text-center text-lg outline-none" /></div>
+        <main class="w-full flex justify-center items-center flex-1 pb-20">
+            <div id="setup-screen" class="bg-[#fffdf5] rounded-[2rem] p-6 shadow-2xl w-full max-w-md border-4 border-yellow-400">
+                <div class="space-y-4">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div><label class="text-[10px] font-bold text-gray-500 uppercase ml-1">Tổng tiền</label><input type="text" id="total-input" value="500.000" class="premium-input w-full p-3 rounded-xl font-bold text-center outline-none" inputmode="numeric"/></div>
+                        <div><label class="text-[10px] font-bold text-gray-500 uppercase ml-1">Số bao</label><input type="number" id="count-input" value="6" min="2" max="50" class="premium-input w-full p-3 rounded-xl font-bold text-center outline-none" inputmode="numeric"/></div>
                     </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div><label class="text-xs font-bold text-gray-500 uppercase ml-1">Min</label><input type="text" id="min-input" value="20.000" class="premium-input w-full p-3 rounded-xl font-bold text-center outline-none" /></div>
-                        <div><label class="text-xs font-bold text-gray-500 uppercase ml-1">Max</label><input type="text" id="max-input" value="200.000" class="premium-input w-full p-3 rounded-xl font-bold text-center outline-none" /></div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div><label class="text-[10px] font-bold text-gray-500 uppercase ml-1">Min</label><input type="text" id="min-input" value="10.000" class="premium-input w-full p-3 rounded-xl font-bold text-center outline-none" inputmode="numeric"/></div>
+                        <div><label class="text-[10px] font-bold text-gray-500 uppercase ml-1">Max</label><input type="text" id="max-input" value="100.000" class="premium-input w-full p-3 rounded-xl font-bold text-center outline-none" inputmode="numeric"/></div>
                     </div>
-                    <div class="flex flex-col sm:flex-row gap-3 pt-2">
-                        <button id="btn-suggest-minmax" class="btn-action flex-1 bg-blue-50 hover:bg-blue-100 text-blue-800 py-2 px-2 rounded-xl font-bold text-xs border border-blue-200">Gợi ý Min/Max</button>
-                        <button id="btn-suggest-total" class="btn-action flex-1 bg-green-50 hover:bg-green-100 text-green-800 py-2 px-2 rounded-xl font-bold text-xs border border-green-200">Gợi ý Tổng</button>
+                    <div class="flex gap-2 pt-1">
+                        <button id="btn-suggest-minmax" class="btn-action flex-1 bg-blue-50 text-blue-800 py-3 rounded-xl font-bold text-[10px] border border-blue-200 uppercase">Gợi ý Min/Max</button>
+                        <button id="btn-suggest-total" class="btn-action flex-1 bg-green-50 text-green-800 py-3 rounded-xl font-bold text-[10px] border border-green-200 uppercase">Gợi ý Tổng</button>
                     </div>
                 </div>
 
-                <div class="mt-6 border-t border-red-100 pt-6">
-                    <button id="btn-generate" class="w-full btn-action bg-yellow-400 hover:bg-yellow-500 text-red-900 py-3 rounded-xl font-bold text-base uppercase tracking-wider shadow-lg">
-                        <i class="fa-solid fa-list-check mr-2"></i> Xem trước bộ số
+                <div class="mt-5 border-t border-red-100 pt-5">
+                    <button id="btn-generate" class="w-full btn-action bg-yellow-400 text-red-900 py-3 rounded-xl font-bold text-sm uppercase tracking-wider shadow-lg">
+                        Xem trước
                     </button>
                 </div>
                 
                 <div id="error-msg" class="hidden mt-4 p-3 bg-red-100 text-red-600 rounded-xl text-center text-xs font-bold"></div>
 
-                <div id="review-section" class="hidden mt-6 bg-white rounded-2xl border-2 border-red-200 overflow-hidden shadow-inner">
-                    <div class="bg-red-50 p-3 border-b border-red-100 flex justify-between items-center">
-                        <span class="text-xs font-bold text-red-700 uppercase">Danh sách chi tiết</span>
-                        <span class="text-[10px] font-bold bg-green-100 text-green-800 px-2 py-1 rounded-full border border-green-200">Hợp lệ</span>
+                <div id="review-section" class="hidden mt-4 bg-white rounded-xl border-2 border-red-200 overflow-hidden shadow-inner">
+                    <div class="bg-red-50 p-2 border-b border-red-100 flex justify-between items-center">
+                        <span class="text-[10px] font-bold text-red-700 uppercase">Chi tiết</span>
+                        <span class="text-[9px] font-bold bg-green-100 text-green-800 px-2 py-0.5 rounded-full">OK</span>
                     </div>
-                    <div id="preview-list" class="p-4 grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-48 overflow-y-auto"></div>
-                    <div class="p-3 bg-gray-50 flex gap-3 border-t border-gray-200">
-                        <button id="btn-reroll-setup" class="flex-1 bg-white border-2 border-gray-300 text-gray-600 hover:bg-gray-100 py-3 rounded-xl font-bold text-sm"><i class="fa-solid fa-rotate mr-1"></i> Đổi số khác</button>
-                        <button id="btn-confirm-start" class="flex-[1.5] bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl font-bold text-sm uppercase shadow-lg shadow-red-500/30 animate-pulse"><i class="fa-solid fa-check mr-1"></i> Chốt & Bắt đầu</button>
+                    <div id="preview-list" class="p-3 grid grid-cols-3 gap-2 max-h-32 overflow-y-auto"></div>
+                    <div class="p-2 bg-gray-50 flex gap-2 border-t border-gray-200">
+                        <button id="btn-reroll-setup" class="flex-1 bg-white border border-gray-300 text-gray-600 py-2 rounded-lg font-bold text-xs">Đổi số</button>
+                        <button id="btn-confirm-start" class="flex-[1.5] bg-red-600 text-white py-2 rounded-lg font-bold text-xs uppercase shadow-md animate-pulse">Bắt đầu</button>
                     </div>
                 </div>
             </div>
 
             <div id="game-screen" class="hidden w-full flex-col items-center">
-                <div class="w-full max-w-7xl mx-auto px-2">
-                    <div id="lixi-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6 justify-items-center pb-32"></div>
+                <div class="w-full max-w-5xl mx-auto px-1">
+                    <div id="lixi-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-6 justify-items-center"></div>
                 </div>
                 
-                <div class="fixed bottom-6 right-6 flex flex-col gap-3 z-50">
-                    <button id="btn-config" title="Cấu hình" class="w-14 h-14 bg-white text-red-600 rounded-full shadow-2xl flex items-center justify-center text-xl border-4 border-yellow-400 transition-transform active:scale-90 hover:scale-105"><i class="fa-solid fa-gear"></i></button>
-                    <button id="btn-reroll-game" title="Tạo bộ số mới" class="w-14 h-14 bg-blue-500 text-white rounded-full shadow-2xl flex items-center justify-center text-xl border-4 border-white transition-transform active:scale-90 hover:scale-105 hover:bg-blue-600"><i class="fa-solid fa-dice"></i></button>
-                    <button id="btn-shuffle" title="Tráo bài lại" class="w-14 h-14 bg-yellow-400 text-red-700 rounded-full shadow-2xl flex items-center justify-center text-xl border-4 border-white transition-transform active:scale-90 hover:scale-105"><i class="fa-solid fa-rotate"></i></button>
+                <div class="fixed bottom-4 right-4 flex flex-col gap-3 z-50">
+                    <button id="btn-config" class="w-12 h-12 bg-white text-red-600 rounded-full shadow-2xl flex items-center justify-center text-lg border-2 border-yellow-400 active:scale-90"><i class="fa-solid fa-gear"></i></button>
+                    <button id="btn-reroll-game" class="w-12 h-12 bg-blue-500 text-white rounded-full shadow-2xl flex items-center justify-center text-lg border-2 border-white active:scale-90"><i class="fa-solid fa-dice"></i></button>
+                    <button id="btn-shuffle" class="w-12 h-12 bg-yellow-400 text-red-700 rounded-full shadow-2xl flex items-center justify-center text-lg border-2 border-white active:scale-90"><i class="fa-solid fa-rotate"></i></button>
                 </div>
             </div>
         </main>
     </div>
 
     <div id="reveal-overlay" class="hidden fixed inset-0 z-[100] flex flex-col items-center justify-center p-4 overlay-blur cursor-pointer">
-        <div id="reveal-card-content" class="relative w-full max-w-[360px] aspect-[3/4.5] entrance-pop bg-[#fffdf5] rounded-[2.5rem] border-8 border-yellow-400 shadow-[0_0_80px_rgba(255,215,0,0.6)] overflow-hidden flex flex-col items-center text-center transition-transform active:scale-95">
+        <div id="reveal-card-content" class="relative w-[90%] max-w-[320px] aspect-[3/4.6] entrance-pop bg-[#fffdf5] rounded-[2rem] border-[6px] border-yellow-400 shadow-[0_0_60px_rgba(255,215,0,0.5)] overflow-hidden flex flex-col items-center text-center transition-transform active:scale-95">
             
             <div id="jackpot-decor" class="hidden absolute inset-0 pointer-events-none">
                 <div class="absolute inset-0 bg-gradient-to-b from-yellow-300/30 to-transparent"></div>
-                <div class="absolute top-0 left-0 w-full h-full animate-pulse opacity-50 bg-[url('https://www.transparenttextures.com/patterns/diagmonds-light.png')]"></div>
             </div>
 
-            <div class="flex-1 w-full flex flex-col items-center justify-center z-10 px-2 mt-8">
+            <div class="flex-1 w-full flex flex-col items-center justify-center z-10 px-2 mt-6">
                 <div id="jackpot-badge" class="hidden mb-2 jackpot-badge">
-                    <span class="bg-red-600 text-yellow-300 border-2 border-yellow-300 px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest shadow-lg">★ Độc Đắc ★</span>
+                    <span class="bg-red-600 text-yellow-300 border border-yellow-300 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg">★ Độc Đắc ★</span>
                 </div>
                 
-                <div id="label-lixi" class="text-red-400 font-bold text-sm tracking-[0.3em] uppercase mb-4 opacity-80">Lộc Xuân</div>
+                <div id="label-lixi" class="text-red-400 font-bold text-xs tracking-[0.3em] uppercase mb-4 opacity-80">Lộc Xuân</div>
                 
-                <div class="w-full flex items-center justify-center scale-100 sm:scale-110 my-4 min-h-[80px]">
-                    <div id="digit-container" class="flex items-center justify-center gap-0.5 font-mono"></div>
+                <div class="w-full flex items-center justify-center scale-100 my-2 min-h-[60px]">
+                    <div id="digit-container" class="flex items-center justify-center gap-px font-mono"></div>
                 </div>
                 
-                <div class="mt-8 pointer-events-none select-none">
-                    <h3 class="text-3xl font-festive text-yellow-600 font-black mb-1">Vạn Sự</h3>
-                    <h2 class="text-5xl font-festive text-red-600 font-black">Như Ý</h2>
+                <div class="mt-6 pointer-events-none select-none">
+                    <h3 class="text-2xl font-festive text-yellow-600 font-black mb-1">Vạn Sự</h3>
+                    <h2 class="text-4xl font-festive text-red-600 font-black">Như Ý</h2>
                 </div>
             </div>
             
-            <div class="w-full p-6 pb-8 bg-white/80 backdrop-blur-sm z-20">
-                <div id="status-decoding" class="h-14 flex items-center justify-center">
-                    <span class="text-yellow-600 font-bold animate-bounce">ĐANG MỞ...</span>
+            <div class="w-full p-4 pb-6 bg-white/90 backdrop-blur-sm z-20">
+                <div id="status-decoding" class="h-12 flex items-center justify-center">
+                    <span class="text-yellow-600 font-bold animate-bounce text-sm">ĐANG MỞ...</span>
                 </div>
-                <button id="btn-claim-lộc" class="hidden w-full bg-gradient-to-r from-yellow-400 to-orange-500 h-14 rounded-2xl text-red-900 font-black text-xl uppercase tracking-wider">NHẬN LỘC</button>
-                <div id="tap-hint" class="hidden text-xs text-gray-400 mt-2 uppercase animate-pulse">(Chạm để đóng)</div>
+                <button id="btn-claim-lộc" class="hidden w-full bg-gradient-to-r from-yellow-400 to-orange-500 h-12 rounded-xl text-red-900 font-black text-lg uppercase tracking-wider">NHẬN LỘC</button>
+                <div id="tap-hint" class="hidden text-[10px] text-gray-400 mt-2 uppercase animate-pulse">(Chạm bất kỳ đâu để đóng)</div>
             </div>
         </div>
     </div>
@@ -174,19 +187,20 @@
             let shuffledAmounts = [];
             let currentOpeningIdx = null;
             let canCloseOverlay = false;
+            let idleInterval = null;
 
-            // --- 1. FIREWORKS SYSTEM ---
+            // --- FIREWORKS ---
             const canvas = document.getElementById('fireworks-canvas');
             const ctx = canvas.getContext('2d');
             let particles = [];
             function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
             window.addEventListener('resize', resizeCanvas); resizeCanvas();
-            function createParticle(x, y, count = 30) {
+            function createParticle(x, y, count = 20) { // Giảm số lượng particle cho mobile
                 for (let i = 0; i < count; i++) {
                     particles.push({
-                        x, y, color: ['#ff0000', '#ffd700', '#ffffff', '#ff4500', '#00ff00', '#0000ff'][Math.floor(Math.random()*6)],
-                        radius: Math.random()*3+1, velocity: { x: (Math.random()-0.5)*10, y: (Math.random()-0.5)*10 },
-                        alpha: 1, decay: Math.random()*0.02+0.015
+                        x, y, color: ['#ff0000', '#ffd700', '#ffffff'][Math.floor(Math.random()*3)],
+                        radius: Math.random()*2+1, velocity: { x: (Math.random()-0.5)*8, y: (Math.random()-0.5)*8 },
+                        alpha: 1, decay: Math.random()*0.03+0.02
                     });
                 }
             }
@@ -201,23 +215,22 @@
             }
             animateFireworks();
             function launchFireworks(intensity = 1) {
-                let duration = intensity > 1 ? 5000 : 3000;
-                let count = intensity > 1 ? 50 : 30;
-                let inter = setInterval(() => createParticle(Math.random()*canvas.width, Math.random()*canvas.height*0.6, count), 200);
+                let duration = intensity > 1 ? 4000 : 2000;
+                let inter = setInterval(() => createParticle(Math.random()*canvas.width, Math.random()*canvas.height*0.5, 20), 300);
                 setTimeout(() => clearInterval(inter), duration);
             }
 
-            // --- 2. CORE LOGIC ---
+            // --- LOGIC ---
             const formatVN = (n) => new Intl.NumberFormat('vi-VN').format(n);
             const parseVN = (s) => parseInt(s.replace(/[^0-9]/g, '')) || 0;
 
             const distributeUnique = (total, count, min, max) => {
                 const UNIT = 10000;
-                if (total % UNIT !== 0 || min % UNIT !== 0 || max % UNIT !== 0 || count < 2) return { success: false, msg: "Lỗi: Số tiền phải là bội số của 10.000đ" };
+                if (total % UNIT !== 0 || min % UNIT !== 0 || max % UNIT !== 0 || count < 2) return { success: false, msg: "Lỗi: Số tiền phải là bội số 10k" };
                 if (max < min + (count - 1) * UNIT) return { success: false, msg: "Lỗi: Khoảng cách Min-Max quá nhỏ" };
                 if (total < (count * min) + (count * (count - 1) / 2) * UNIT) return { success: false, msg: "Lỗi: Tổng tiền quá ít" };
 
-                for (let attempt = 0; attempt < 5000; attempt++) {
+                for (let attempt = 0; attempt < 2000; attempt++) {
                     let set = new Set([min, max]);
                     while (set.size < count) set.add(Math.floor(Math.random()*((max-min)/UNIT+1))*UNIT+min);
                     let arr = Array.from(set).sort((a,b)=>a-b);
@@ -230,12 +243,12 @@
                             else { let s = Math.min(Math.abs(diff), Math.ceil((arr[i]-arr[i-1]-UNIT)/UNIT)*UNIT); if(arr[i]-s <= arr[i-1]) s=arr[i]-arr[i-1]-UNIT; if(s>0){arr[i]-=s; diff+=s;} }
                         }
                     }
-                    if(arr.reduce((a,b)=>a+b,0)===total && new Set(arr).size===count && arr[0]===min && arr[count-1]===max) return {success:true, amounts:arr};
+                    if(arr.reduce((a,b)=>a+b,0)===total && new Set(arr).size===count) return {success:true, amounts:arr};
                 }
-                return { success: false, msg: "Không tìm được phương án chia tiền hợp lý!" };
+                return { success: false, msg: "Không tìm được phương án!" };
             };
 
-            // --- 3. UI HANDLERS ---
+            // --- UI HANDLERS ---
             $('#btn-suggest-minmax').click(() => {
                 const t = parseVN($('#total-input').val()), c = parseInt($('#count-input').val());
                 if(t<=0 || c<2) return;
@@ -259,11 +272,10 @@
                     const $list = $('#preview-list').empty();
                     res.amounts.forEach(amt => {
                         let isSpecial = (amt === mn || amt === mx);
-                        $list.append(`<div class="preview-item border ${isSpecial ? 'bg-yellow-100 border-yellow-300 text-red-800' : 'bg-gray-50 border-gray-200 text-gray-700'} rounded-lg py-2 px-1 text-center shadow-sm"><div class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-0.5">Lì xì</div><div class="text-xs sm:text-sm font-black">${formatVN(amt)}</div></div>`);
+                        $list.append(`<div class="preview-item border ${isSpecial ? 'bg-yellow-100 border-yellow-300 text-red-800' : 'bg-gray-50 border-gray-200 text-gray-700'} rounded-lg py-1 px-1 text-center shadow-sm"><div class="text-[9px] text-gray-400 font-bold uppercase mb-0.5">Lì xì</div><div class="text-[10px] sm:text-xs font-black">${formatVN(amt)}</div></div>`);
                     });
                     config = { total: t, count: c, min: mn, max: mx, amounts: res.amounts };
                     $('#review-section').removeClass('hidden');
-                    $('html, body').animate({ scrollTop: $("#review-section").offset().top - 20 }, 500);
                     return true;
                 } else { $('#review-section').addClass('hidden'); $('#error-msg').removeClass('hidden').text(res.msg); return false; }
             };
@@ -280,17 +292,44 @@
                     startDealAnimation();
                 });
             });
-            $('#btn-config').click(() => $('#game-screen').fadeOut(300, () => { $('#setup-screen').fadeIn(300); $('#game-screen').addClass('hidden'); }));
+            $('#btn-config').click(() => $('#game-screen').fadeOut(300, () => { 
+                $('#setup-screen').fadeIn(300); $('#game-screen').addClass('hidden'); 
+                stopIdleAnimation();
+            }));
             $('#btn-shuffle').click(() => startDealAnimation());
 
-            // --- 4. DEAL ANIMATION ---
+            // --- IDLE ANIMATION FOR MOBILE (Thay cho Hover) ---
+            const startIdleAnimation = () => {
+                stopIdleAnimation();
+                idleInterval = setInterval(() => {
+                    // Lọc ra các bao chưa mở
+                    const availableIndices = openStates.map((state, idx) => state ? -1 : idx).filter(idx => idx !== -1);
+                    if (availableIndices.length === 0) return;
+                    
+                    // Chọn ngẫu nhiên 1 bao
+                    const randomIdx = availableIndices[Math.floor(Math.random() * availableIndices.length)];
+                    const $wrapper = $(`#slot-${randomIdx} .lixi-wrapper`);
+                    
+                    if($wrapper.length) {
+                        $wrapper.addClass('wiggling');
+                        setTimeout(() => $wrapper.removeClass('wiggling'), 600);
+                    }
+                }, 2500); // 2.5s lắc 1 lần
+            };
+            
+            const stopIdleAnimation = () => {
+                if(idleInterval) clearInterval(idleInterval);
+            };
+
+            // --- DEAL ANIMATION ---
             const startDealAnimation = () => {
+                stopIdleAnimation();
                 const $g = $('#lixi-grid').empty();
                 openStates = new Array(config.count).fill(false);
                 shuffledAmounts = [...config.amounts].sort(()=>Math.random()-0.5);
                 
                 shuffledAmounts.forEach((a, i) => {
-                    $g.append(`<div id="slot-${i}" class="lixi-wrapper relative w-full aspect-[2/3] max-w-[160px] opacity-0"></div>`);
+                    $g.append(`<div id="slot-${i}" class="w-full aspect-[2/3] max-w-[130px] opacity-0 flex items-center justify-center"></div>`);
                 });
 
                 const centerX = window.innerWidth / 2;
@@ -310,27 +349,38 @@
                         $flyer.css({ 'transform': `translate(${destX - centerX}px, ${destY - centerY}px) scale(1)`, 'opacity': 1 });
                         setTimeout(() => {
                             $flyer.remove();
+                            
+                            // Câu thoại vui cho mobile
+                            const funnyTexts = ["Chọn tui đi!", "Tui nè!", "Nhiều tiền!", "Mở ngay!", "Đây nè!"];
+                            const randomText = funnyTexts[Math.floor(Math.random() * funnyTexts.length)];
+
                             const $realCard = $(`
-                                <div class="w-full h-full rounded-2xl bg-gradient-to-br from-red-600 to-red-800 border-2 border-yellow-400 shadow-xl overflow-hidden flex flex-col items-center justify-center shimmer relative cursor-pointer hover:scale-105 transition-transform duration-200">
-                                    <div class="front-ui absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-red-600 to-red-800 z-10">
-                                        <div class="w-16 h-16 rounded-full border-4 border-yellow-200 bg-red-700 flex items-center justify-center mb-2 shadow-inner">
-                                            <span class="text-yellow-400 font-festive text-3xl font-bold">Tết</span>
+                                <div class="lixi-wrapper relative w-full h-full cursor-pointer">
+                                    <div class="speech-bubble">${randomText}</div>
+                                    <div class="w-full h-full rounded-xl bg-gradient-to-br from-red-600 to-red-800 border-2 border-yellow-400 shadow-md overflow-hidden flex flex-col items-center justify-center shimmer relative">
+                                        <div class="front-ui absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-red-600 to-red-800 z-10">
+                                            <div class="w-12 h-12 rounded-full border-2 border-yellow-200 bg-red-700 flex items-center justify-center mb-1 shadow-inner">
+                                                <span class="text-yellow-400 font-festive text-2xl font-bold">Tết</span>
+                                            </div>
+                                            <span class="text-white text-[8px] uppercase tracking-widest opacity-80">May Mắn</span>
                                         </div>
-                                        <span class="text-white text-[10px] uppercase tracking-widest opacity-80">May Mắn</span>
-                                    </div>
-                                    <div class="back-ui hidden absolute inset-0 bg-white flex-col items-center justify-center p-2 z-20">
-                                        <span class="text-red-600 font-black text-xl text-center break-words">${formatVN(amt)}<br><span class="text-xs text-gray-400">VNĐ</span></span>
+                                        <div class="back-ui hidden absolute inset-0 bg-white flex-col items-center justify-center p-1 z-20">
+                                            <span class="text-red-600 font-black text-lg text-center break-words leading-tight">${formatVN(amt)}<br><span class="text-[8px] text-gray-400">VNĐ</span></span>
+                                        </div>
                                     </div>
                                 </div>
                             `);
                             $slot.empty().append($realCard).css('opacity', 1);
                             $realCard.click(() => handleOpen(i));
-                        }, 600);
-                    }, i * 150);
+                        }, 500);
+                    }, i * 100);
                 });
+                
+                // Bắt đầu idle animation sau khi chia xong
+                setTimeout(startIdleAnimation, config.count * 100 + 1000);
             };
 
-            // --- 5. REVEAL LOGIC ---
+            // --- OPEN LOGIC ---
             const handleOpen = (idx) => {
                 if(openStates[idx]) return;
                 currentOpeningIdx = idx;
@@ -340,7 +390,7 @@
                 const amountStr = formatVN(amount);
                 const isJackpot = (amount === config.max);
 
-                $('#reveal-overlay').removeClass('hidden jackpot-mode').hide().fadeIn(300).css('display', 'flex');
+                $('#reveal-overlay').removeClass('hidden jackpot-mode').hide().fadeIn(200).css('display', 'flex');
                 $('#digit-container').empty();
                 $('#status-decoding').show();
                 $('#btn-claim-lộc, #tap-hint, #jackpot-decor, #jackpot-badge').hide();
@@ -352,22 +402,19 @@
                     $('#label-lixi').text("CHÚC MỪNG").removeClass("text-red-400").addClass("text-yellow-600");
                 }
 
-                // Hiển thị số từ phải qua trái
                 const chars = amountStr.split('');
                 chars.forEach((char, i) => {
                     const isSep = char === '.';
                     const $digit = $(`
-                        <div class="digit-box relative ${isSep ? 'separator-box' : 'w-7 sm:w-10'} h-14 sm:h-20 flex items-center justify-center overflow-hidden">
-                            <span class="relative z-10 text-[#d00000] font-bold ${isSep ? 'text-3xl' : 'text-5xl sm:text-6xl'} leading-none" style="color: #d00000 !important;">${char}</span>
+                        <div class="digit-box relative ${isSep ? 'separator-box' : 'w-5 sm:w-8'} h-10 sm:h-16 flex items-center justify-center overflow-hidden">
+                            <span class="relative z-10 text-[#d00000] font-bold ${isSep ? 'text-2xl' : 'text-4xl sm:text-5xl'} leading-none" style="color: #d00000 !important;">${char}</span>
                             <div class="digit-reveal-cover absolute inset-0 z-20"></div>
                         </div>
                     `);
                     $('#digit-container').append($digit);
-                    // Logic delay: số cuối cùng (i lớn) hiện trước (delay nhỏ), số đầu tiên (i nhỏ) hiện sau (delay lớn)
-                    const delay = (chars.length - 1 - i) * 200;
-                    setTimeout(() => $digit.addClass('revealed'), delay);
+                    setTimeout(() => $digit.addClass('revealed'), (chars.length - 1 - i) * 150);
                 });
-                $('#digit-container').append(`<span class="text-[#d00000] text-3xl sm:text-4xl font-bold mt-4 ml-1 z-10">đ</span>`);
+                $('#digit-container').append(`<span class="text-[#d00000] text-2xl sm:text-3xl font-bold mt-2 ml-1 z-10">đ</span>`);
 
                 setTimeout(() => {
                     $('#status-decoding').hide();
@@ -375,21 +422,20 @@
                     if (isJackpot) { $('#jackpot-badge').fadeIn().addClass('entrance-pop'); launchFireworks(2); } 
                     else { launchFireworks(1); }
                     canCloseOverlay = true;
-                }, (chars.length * 200) + 500);
+                }, (chars.length * 150) + 400);
             };
 
             const closeAndClaim = () => {
                 if(!canCloseOverlay) return;
                 openStates[currentOpeningIdx] = true;
                 
-                // Cập nhật trạng thái bao lì xì trên lưới
-                const $slot = $(`#slot-${currentOpeningIdx} .w-full`); // Chọn thẻ card
-                $slot.addClass('lixi-opened');
-                $slot.find('.front-ui').addClass('hidden');
-                $slot.find('.back-ui').removeClass('hidden').addClass('flex');
+                const $c = $(`#slot-${currentOpeningIdx} .lixi-wrapper`);
+                $c.addClass('lixi-opened');
+                $c.find('.front-ui').addClass('hidden');
+                $c.find('.back-ui').removeClass('hidden').addClass('flex');
                 
                 if(shuffledAmounts[currentOpeningIdx] === config.max) {
-                     $slot.find('.back-ui').css({ 'background': '#fff9c4', 'border': '2px solid #ffd700', 'color': '#d00000' });
+                     $c.find('.back-ui').css({ 'background': '#fff9c4', 'border': '2px solid #ffd700', 'color': '#d00000' });
                 }
                 
                 $('#reveal-overlay').fadeOut();
